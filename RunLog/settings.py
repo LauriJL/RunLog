@@ -8,10 +8,6 @@ SECRET_KEY = config("SECRET_KEY")
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -69,7 +65,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'RunDB',
         'USER': 'postgres',
-        'PASSWORD': 'Fawad4F8ka',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5433',
     }
