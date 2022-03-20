@@ -31,6 +31,17 @@
               </li>
             </ul>
           </div>
+          <div class="nav navbar-nav navbar-right">
+            <li>
+                <div class="btn-nav"><a class="nav-link active" aria-current="page" href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:blue;" class="fas fa-solid fa-circle-plus fa-2xl"></i></a>
+                </div>
+            </li>
+            <li>
+              <div>
+                <button role="button" class="btn btn-link" onClick="refreshPage()"><i title="Refresh" style="color: green;" class="fas fa-solid fa-arrows-rotate fa-2xl"></i></button>
+              </div>
+            </li>
+          </div>
         </div>
       </nav>
       <div id="addRunModal" class="modal fade" tabindex="-1">
@@ -86,3 +97,35 @@
       </main>
 </body>
 </html>
+<script type="text/javascript">
+  $('#btnAdd').click(function() {
+      $('#addRunModal').modal('hide');
+      // TODO: refresh page on submit
+      location.reload();
+  });
+
+  $("#add_run_form").submit(function(event){
+      //e.preventDefault();
+      $.ajax({
+          type:'POST',
+          url:'addRun',
+          data:{
+              run_date:$('#run_date').val(),
+              run_time:$('#run_time').val(),
+              distance:$('#distance').val(),
+              pace:$('#pace').val(),
+              bpm:$('#bpm').val(),
+              remarks:$('#remarks').val(),
+              csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+          },
+          success:function(data){
+              location.reload();
+              //console.log(data);
+              //$('#add_run_form').modal('hide');
+              //return false;
+          }
+      });
+      event.preventDefault();
+  });
+
+</script>

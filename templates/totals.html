@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Run Log{% endblock title %}
+{% block title %}Run Log - Overview{% endblock title %}
 
 {% block content %}
 <script>
@@ -9,11 +9,6 @@
         }
     </script>
 <div>
-    <br />
-    <!-- Modal button -->
-    <a href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:blue;size: 30" class="fas fa-solid fa-circle-plus fa-2xl"></i></a>
-    <button role="button" class="btn btn-link" onClick="refreshPage()"><i title="Refresh" style="color: green;" class="fas fa-solid fa-arrows-rotate fa-2xl"></i></button>
-    <br />
     <br />
     {% for total in dataTotals %}
     <div class="row row-cols-3 row-cols-md-3 g-4">
@@ -121,34 +116,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $('#btnAdd').click(function() {
-        $('#addRunModal').modal('hide');
-        //window.location.reload();
-    });
-
-    $("#add_run_form").submit(function(event){
-        //e.preventDefault();
-        $.ajax({
-            type:'POST',
-            url:'addRun',
-            data:{
-                run_date:$('#run_date').val(),
-                run_time:$('#run_time').val(),
-                distance:$('#distance').val(),
-                pace:$('#pace').val(),
-                bpm:$('#bpm').val(),
-                remarks:$('#remarks').val(),
-                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-            },
-            success:function(){
-                //console.log(data);
-                //$('#add_run_form').modal('hide');
-                //return false;
-            }
-        });
-        event.preventDefault();
-    });
-
-</script>
 {% endblock content %}
