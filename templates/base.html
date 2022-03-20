@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <title>Run Log</title>
+</head>
+<body class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'showTotals' %}"><h2><i class="fa-solid fa-person-running"></i> Run Log</h2></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'showTotals' %}">Overview</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'showLog' %}">Log</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'charts' %}">Charts</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div id="addRunModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Run</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="add_run_form" class="form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Date</label>
+                            <input type="date" name="run_date" class="form-control" id="run_date">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Run time</label>
+                            <input type="text" name="run_time" class="form-control" id="run_time" placeholder="hh:mm:ss">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Distance</label>
+                            <input type="text" name="distance" class="form-control" id="distance" placeholder="Distance (km)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Pace</label>
+                            <input type="text" name="pace" class="form-control" id="pace" placeholder="Pace (time/km)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">BPM</label>
+                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="BPM (average)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Remarks</label>
+                            <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks">
+                        </div>
+                        <!-- <div> -->
+                        <div class="modal-footer">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success" id="btnAdd"><i class="fas fa-solid fa-check"></i></button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>                   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="container">
+          {% block content %}
+          {% endblock content %}
+        </div>
+      </main>
+</body>
+</html>

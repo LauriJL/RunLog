@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<script>
+function refreshPage(){
+    window.location.reload();
+    }
+</script>
+<div>
+    <!-- <h3>All Runs</h3> -->
+    <br />
+    <!-- Modal button -->
+    <a href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:blue;size: 30" class="fas fa-solid fa-circle-plus fa-2xl"></i></a>
+    <button role="button" class="btn btn-link" onClick="refreshPage()"><i title="Refresh" style="color: green;" class="fas fa-solid fa-arrows-rotate fa-2xl"></i></button>
+    <br />
+    <br />
+    <table class="table table-sm">
+        <thead class="thead-dark rounded" style="background-color: rgb(224, 163, 163);">
+            <tr>
+                <th style="width: 12.5%">Date</th>
+                <th style="width: 10%">Time</th>
+                <th style="width: 12.5%">Distance (km)</th>
+                <th style="width: 12.5%">Pace (time/km)</th>
+                <th style="width: 10%">BPM</th>
+                <th style="width: 40%">Remarks</th>
+                <th style="background-color:#FDFEFE; border:none"></th>
+                <th style="background-color:#FDFEFE; border:none"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in dataLog %}
+            <tr>
+                <td>{{result.run_date|date:'d.m.Y'}}</td>
+                <td>{{result.run_time}}</td>
+                <td>{{result.distance}}</td>
+                <td>{{result.pace}}</td>
+                <td>{{result.bpm}}</td>
+                <td>{{result.remarks}}</td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="edit/{{result.id}}">
+                        <i title="Edit" style="color: green;" class="fas fa-solid fa-pen-to-square"></i>
+                    </a>
+                </td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="{% url 'deleteRun' result.id %}">
+                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="addRunModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Run</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="add_run_form" class="form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Date</label>
+                            <input type="date" name="run_date" class="form-control" id="run_date">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Run time</label>
+                            <input type="text" name="run_time" class="form-control" id="run_time" placeholder="hh:mm:ss">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Distance</label>
+                            <input type="text" name="distance" class="form-control" id="distance" placeholder="Distance (km)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Pace</label>
+                            <input type="text" name="pace" class="form-control" id="pace" placeholder="Pace (time/km)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">BPM</label>
+                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="BPM (average)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Remarks</label>
+                            <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks">
+                        </div>
+                        <!-- <div> -->
+                        <div class="modal-footer">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success" id="btnAdd"><i class="fas fa-solid fa-check"></i></button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>                   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#btnAdd').click(function() {
+        $('#addRunModal').modal('hide');
+        // TODO: refresh page on submit
+        location.reload();
+    });
+
+    $("#add_run_form").submit(function(event){
+        //e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'addRun',
+            data:{
+                run_date:$('#run_date').val(),
+                run_time:$('#run_time').val(),
+                distance:$('#distance').val(),
+                pace:$('#pace').val(),
+                bpm:$('#bpm').val(),
+                remarks:$('#remarks').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success:function(data){
+                location.reload();
+                //console.log(data);
+                //$('#add_run_form').modal('hide');
+                //return false;
+            }
+        });
+        event.preventDefault();
+    });
+
+</script>
+{% endblock content %}

@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log - Charts{% endblock title %}
+
+{% block content %}
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/> -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script> -->
+{% load static %}
+<link ref="stylesheet" type="text/css" href="{% static 'RunLog/styles.css' %}"/>
+
+<div class="container">
+  <br />
+  <ul class="nav nav-tabs nav-fill">
+    <li class="nav-item">
+      <a class="nav-link" href="#a" data-toggle="tab">BPM</a>
+     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#b" data-toggle="tab">Pace</a>
+     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#c" data-toggle="tab">Distance</a>
+     </li>
+ </ul>
+ 
+ <div class="tab-content">
+    <div class="tab-pane active" id="a">
+      <br />
+      <h4>BPM</h4>
+      <br/>
+      <canvas id="bpmChart" data-url="{% url 'bpmChart' %}" style="height:7vw;width:20vw"></canvas>
+     </div>
+    <div class="tab-pane" id="b">
+      <br />
+      <h4>Pace</h4>
+      <br/>
+      <canvas id="paceChart" data-url="{% url 'paceChart' %}" style="height:7vw;width:20vw"></canvas>
+    </div>
+    <div class="tab-pane" id="c">
+      <br />
+      <h4>Distance</h4>
+      <br/>
+     <canvas id="distanceChart" data-url="{% url 'distanceChart' %}" style="height:7vw;width:20vw"></canvas>
+    </div>
+ </div>
+</div>
+
+
+<script>
+  // BPM chart
+  $(function () {
+
+    var $bpmChart = $("#bpmChart");
+    $.ajax({
+      url: $bpmChart.data("url"),
+      success: function (data) {
+
+        var ctx = $bpmChart[0].getContext("2d");
+
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              label: 'Average BPM',
+              fill: false,
+              data: data.data,
+              borderColor: "blue"
+            }]          
+          },
+          options: {
+            responsive: true,
+            legend: {
+              position: 'top',
+              display: false
+            },
+            title: {
+              display: false,
+              text: 'Average BPM'
+            },
+            scales: {
+                yAxes: [{
+                  ticks:{
+                    min: 100,
+                    max: 160,
+                      }
+                    }],
+                xAxes: {
+                  type: "time",
+                  time: {
+                    // Luxon format string
+                    tooltipFormat: 'DD T'
+                    },
+              }
+            }
+          }
+        });
+      }
+    });
+});
+
+//Distance chart
+$(function () {
+
+var $distanceChart = $("#distanceChart");
+$.ajax({
+    url: $distanceChart.data("url"),
+    success: function (data) {
+
+    var ctx = $distanceChart[0].getContext("2d");
+
+    new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: data.labels,
+        datasets: [{
+            label: 'Distance',
+            fill: true,
+            data: data.data,
+            borderColor: "red",
+            borderRadius: '50px',
+            backgroundColor: "orange"
+        }]          
+    },
+    options: {
+        responsive: true,
+        legend: {
+          position: 'top',
+          display: false
+          },
+        title: {
+          display: false,
+          text: 'Distance',
+          },
+        scales: {
+            yAxes: [{
+                display: true,
+                ticks: {
+                steps: 10,
+                stepValue: 5,
+                beginAtZero: true,
+                max: 20
+                }
+            }]
+        }
+    }
+});
+}
+});
+});
+
+//Pace chart
+const NUMBER_CFG = {decimals: 2};
+    $(function () {
+
+    var $paceChart = $("#paceChart");
+    $.ajax({
+      url: $paceChart.data("url"),
+      success: function (data) {
+
+      var ctx = $paceChart[0].getContext("2d");
+
+      new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: data.labels,
+          datasets: [{
+              label: 'Pace',
+              fill: false,
+              data: data.data,
+              borderColor: "red",
+              borderRadius: '50px',
+          }]          
+      },
+      options: {
+          responsive: true,
+          legend: {
+            position: 'top',
+            display: false
+            },
+          title: {
+          display: false,
+          text: 'Pace',
+          },
+          scales: {
+              yAxes: [{
+                  display: true,
+                  ticks: {
+                  steps: 1,
+                  stepValue: 5,
+                  min: 5,
+                  max: 8
+                  }
+              }]
+          },
+          tooltip: {
+            formatter: false
+          }
+      }
+  });
+  }
+  });
+  });
+</script>
+
+{% endblock content %}

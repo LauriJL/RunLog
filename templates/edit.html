@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <body>
+        <h3>Edit run</h3>
+        <hr/>
+
+        {% if messages %}
+        {% for mess in messages %}
+        <div class="alert alert-success" role="alert">
+            <p><span>{{mess}}</span></p>
+            <hr/>
+            <a href="{% url 'showLog' %}" class="btn btn-secondary" role="button">Back to Log</a>
+          </div>
+        {% endfor %}
+        {% endif %}
+        
+        <form method="post" action="/update/{{RunLogModel.id}}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Date (yyyy-mm-dd)</label>
+                <input type="text" name="run_date" class="form-control" value="{{RunLogModel.run_date|date:'Y-m-d'}}" placeholder="yyyy-mm-dd">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Run time</label>
+                <input type="text" name="run_time" class="form-control" value="{{RunLogModel.run_time}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Distance</label>
+                <input type="text" name="distance" class="form-control" value="{{RunLogModel.distance}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pace</label>
+                <input type="text" name="pace" class="form-control" value="{{RunLogModel.pace}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">BPM</label>
+                <input type="text" name="bpm" class="form-control" value="{{RunLogModel.bpm}}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Remarks</label>
+                <input type="text" name="remarks" class="form-control" value="{{RunLogModel.remarks}}">
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a href="{% url 'showLog' %}" class="btn btn-secondary" role="button">Back</a>
+            </div>
+        </form>
+    </body>
+</div>
+
+{% endblock content %}
