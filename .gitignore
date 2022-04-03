@@ -1,1 +1,6 @@
 .env
+
+ __pycache__/
+ *.pyc
+RunLog/__pycache__/settings.cpython-38.pyc
+RunLog/__pycache__/settings.cpython-38.pyc
