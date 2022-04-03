@@ -102,7 +102,7 @@ IF NOT EXISTS public.runlog_id_seq
     MINVALUE 1
     MAXVALUE 2147483647
     CACHE 1;
-—totals id
+-- totals id
 CREATE SEQUENCE
 IF NOT EXISTS public.totals_id_seq
     INCREMENT 1
