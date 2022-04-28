@@ -126,6 +126,13 @@ $.ajax({
         }]          
     },
     options: {
+      tooltips:{
+            callbacks:{
+              label: function(tooltipItem,data) {
+                return Number(tooltipItem.yLabel).toFixed(2)
+              }
+            }
+          },
         responsive: true,
         legend: {
           position: 'top',
@@ -176,6 +183,13 @@ const NUMBER_CFG = {decimals: 2};
           }]          
       },
       options: {
+          tooltips:{
+            callbacks:{
+              label: function(tooltipItem,data) {
+                return Number(tooltipItem.yLabel).toFixed(2)
+              }
+            }
+          },
           responsive: true,
           legend: {
             position: 'top',
