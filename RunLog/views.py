@@ -75,6 +75,24 @@ def deleteRun(request, id):
     return redirect('showLog')
 
 
+def goal(request):
+    #showall = RunTotalsModel.objects.all()
+    # return render(request, 'goal.html', {"goal": showall}, {})
+    showall = RunTotalsModel.objects.all()
+    return render(request, 'goal.html', {"dataTotals": showall})
+
+
+def addGoal(request):
+    if request.method == 'POST':
+        goal = request.POST['goal']
+
+    RunTotalsModel.objects.create(
+        goal=goal
+    )
+
+    return render(request, 'addGoal.html')
+
+
 def charts(request):
     return render(request, 'charts.html')
 

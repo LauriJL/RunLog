@@ -22,6 +22,8 @@ class RunTotalsModel(models.Model):
     fastest_pace = models.DurationField()
     average_bpm = models.IntegerField()
     average_runtime = models.DurationField()
+    goal = models.IntegerField()
+    togo = models.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
         db_table = "totals"

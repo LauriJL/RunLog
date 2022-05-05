@@ -7,7 +7,7 @@
     function refreshPage(){
         window.location.reload();
         }
-    </script>
+</script>
 <div>
     <br />
     {% for total in dataTotals %}
@@ -68,6 +68,15 @@
                 </div>
             </div>
         </div>
+        <div class="col">
+            <div class="card border border-primary">
+                <div class="card-body">
+                    <h4 class="card-title">To Go</h4>
+                    <p class="card-text">{{total.togo}} km ({{total.goal}} km)</p>
+                </div>
+            </div>
+        </div>
+
     </div>
     {% endfor %}
     <div id="addRunModal" class="modal fade" tabindex="-1">
