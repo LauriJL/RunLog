@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log - Overview{% endblock title %}
+
+{% block content %}
+
+<div>
+    <br />
+    <h3>Goal</h3>
+    <br />
+    {% for total in dataTotals %}
+    <div class="row row-cols-3 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card border border-primary">
+                <div class="card-body">
+                    <h4 class="card-title">Your goal for this year is...</h4>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.goal}} km</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border border-primary">
+                <div class="card-body">
+                    <h4 class="card-title">So far you have run...</h4>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.total_distance}} km</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border border-primary">
+                <div class="card-body">
+                    <h4 class="card-title">You have this far to go...</h4>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
+                </div>
+            </div>
+        </div>
+    </div>   
+    {% endfor %}
+    
+</div>
+
+{% endblock %}
