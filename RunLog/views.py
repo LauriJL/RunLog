@@ -1,7 +1,11 @@
 from cProfile import label
 from django.http import HttpResponse, JsonResponse
+from .models import RunLogModel, RunTotalsModel
+from .serializers import RunLogSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from django.shortcuts import render, redirect
-from RunLog.models import RunLogModel, RunTotalsModel
 from django.contrib import messages
 from .forms import runForms
 
@@ -16,22 +20,57 @@ def showLog(request):
     return render(request, 'log.html', {"dataLog": showall})
 
 
-# def insertRun(request):
-#     if request.method == "POST":
-#         if request.POST.get('run_date') and request.POST.get('run_time') and request.POST.get('distance') and request.POST.get('pace') and request.POST.get('bpm') and request.POST.get('remarks'):
-#             saverecord = RunLogModel()
-#             saverecord.run_date = request.POST.get('run_date')
-#             saverecord.run_time = request.POST.get('run_time')
-#             saverecord.distance = request.POST.get('distance')
-#             saverecord.pace = request.POST.get('pace')
-#             saverecord.bpm = request.POST.get('bpm')
-#             saverecord.remarks = request.POST.get('remarks')
-#             saverecord.save()
-#             messages.success(request, 'Run on ' +
-#                              saverecord.run_date + ' added successfully.')
-#             return render(request, 'log.html')
-#     else:
-#         return render(request, 'log.html')
+@api_view(['GET', 'POST'])
+def logJSON(request, format=None):
+    if request.method == 'GET':
+        showall = RunLogModel.objects.all().order_by('run_date')
+        serializer = RunLogSerializer(showall, many=True)
+        return render(request, 'logJSON.html', {"dataLog": serializer.data})
+    if request.method == 'POST':
+        serializer = RunLogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def logJSON_detail(request, id):
+
+    try:
+        run = RunLogModel.objects.get(pk=id)
+    except RunLogModel.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = RunLogSerializer(run)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = RunLogSerializer(run, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        run.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # def insertRun(request):
+    #     if request.method == "POST":
+    #         if request.POST.get('run_date') and request.POST.get('run_time') and request.POST.get('distance') and request.POST.get('pace') and request.POST.get('bpm') and request.POST.get('remarks'):
+    #             saverecord = RunLogModel()
+    #             saverecord.run_date = request.POST.get('run_date')
+    #             saverecord.run_time = request.POST.get('run_time')
+    #             saverecord.distance = request.POST.get('distance')
+    #             saverecord.pace = request.POST.get('pace')
+    #             saverecord.bpm = request.POST.get('bpm')
+    #             saverecord.remarks = request.POST.get('remarks')
+    #             saverecord.save()
+    #             messages.success(request, 'Run on ' +
+    #                              saverecord.run_date + ' added successfully.')
+    #             return render(request, 'log.html')
+    #     else:
+    #         return render(request, 'log.html')
 
 
 def addRun(request):

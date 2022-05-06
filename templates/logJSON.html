@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<script>
+function refreshPage(){
+    window.location.reload();
+    }
+</script>
+<div>
+    <br />
+    <h4>All Runs</h4>
+    <br />
+    <table class="table table-sm">
+        <thead class="thead-dark rounded" style="background-color: rgb(224, 163, 163);">
+            <tr>
+                <th style="width: 12.5%">Date</th>
+                <th style="width: 10%">Time</th>
+                <th style="width: 12.5%">Distance (km)</th>
+                <th style="width: 12.5%">Pace (time/km)</th>
+                <th style="width: 10%">BPM</th>
+                <th style="width: 40%">Remarks</th>
+                <th style="background-color:#FDFEFE; border:none"></th>
+                <th style="background-color:#FDFEFE; border:none"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in dataLog %}
+            <tr>
+                <td>{{result.run_date}}</td>
+                <td>{{result.run_time}}</td>
+                <td>{{result.distance}}</td>
+                <td>{{result.pace}}</td>
+                <td>{{result.bpm}}</td>
+                <td>{{result.remarks}}</td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="edit/{{result.id}}">
+                        <i title="Edit" style="color: green;" class="fas fa-solid fa-pen-to-square"></i>
+                    </a>
+                </td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="{% url 'deleteRun' result.id %}">
+                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endblock content %}

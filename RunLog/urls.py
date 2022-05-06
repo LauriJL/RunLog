@@ -1,11 +1,15 @@
 from django.contrib import admin
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.showTotals, name="showTotals"),
     path('log', views.showLog, name="showLog"),
+    path('logJSON', views.logJSON, name="logJSON"),
+    path('logJSON/<int:id>', views.logJSON_detail, name="logJSON_detail"),
     #path('insert', views.insertRun, name="insertRun"),
     path('addRun', views.addRun),
     path('edit/<id>', views.editRun, name="editRun"),
@@ -21,3 +25,5 @@ urlpatterns = [
     path('distanceChart', views.distance_chart, name='distanceChart'),
     path('paceChart', views.pace_chart, name='paceChart'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

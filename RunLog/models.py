@@ -10,6 +10,9 @@ class RunLogModel(models.Model):
     remarks = models.TextField(blank=True)
     run_time = models.DurationField()
 
+    def __str__(self):
+        return str(self.run_date)
+
     class Meta:
         db_table = "runlog"
 
