@@ -9,6 +9,10 @@
     <h3>Goal</h3>
     <br />
     {% for total in dataTotals %}
+    {% if not total.goal %}
+    <p>Please set a goal for this year!</p>
+    {% endif %}
+    {% if total.goal %}
     <div class="row row-cols-3 row-cols-md-3 g-4">
         <div class="col">
             <div class="card border border-primary">
@@ -29,12 +33,19 @@
         <div class="col">
             <div class="card border border-primary">
                 <div class="card-body">
+                    {% if total.togo > 0%}
                     <h4 class="card-title">You have this far to go...</h4>
                     <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
+                    {% endif %}
+                    {% if total.togo <= 0 %}
+                    <h4 class="card-title">Goal reached! <i style="color:green;" class="fas fa-light fa-trophy"></i></h4>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
+    {% endif %}
     {% endfor %}
     
 </div>
