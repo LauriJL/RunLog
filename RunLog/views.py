@@ -1,13 +1,15 @@
 from cProfile import label
 from django.http import HttpResponse, JsonResponse
 from .models import RunLogModel, RunTotalsModel
-from .serializers import RunLogSerializer
+from .serializers import RunLogSerializer, RunTotalSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import runForms
+from django.core.paginator import Paginator
+from .forms import runForms, totalForms
 
 
 def showTotals(request):
@@ -17,15 +19,26 @@ def showTotals(request):
 
 def showLog(request):
     showall = RunLogModel.objects.all().order_by('run_date')
-    return render(request, 'log.html', {"dataLog": showall})
+    paginator = Paginator(showall, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'log.html', {"page_obj": page_obj})
+    # return render(request, 'log.html', {"dataLog": showall})
 
 
 @api_view(['GET', 'POST'])
-def logJSON(request, format=None):
+def logJSON(request):
     if request.method == 'GET':
         showall = RunLogModel.objects.all().order_by('run_date')
+        paginator = Paginator(showall, 20)
+        page = request.QUERY_PARAMS.get('page')
         serializer = RunLogSerializer(showall, many=True)
+        paginator = Paginator(serializer.data, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'logJSON.html', {"page_obj": page_obj})
         return render(request, 'logJSON.html', {"dataLog": serializer.data})
+        return Response(serializer.data)
     if request.method == 'POST':
         serializer = RunLogSerializer(data=request.data)
         if serializer.is_valid():
@@ -115,21 +128,19 @@ def deleteRun(request, id):
 
 
 def goal(request):
-    #showall = RunTotalsModel.objects.all()
-    # return render(request, 'goal.html', {"goal": showall}, {})
     showall = RunTotalsModel.objects.all()
     return render(request, 'goal.html', {"dataTotals": showall})
 
 
-def addGoal(request):
-    if request.method == 'POST':
-        goal = request.POST['goal']
+# def addGoal(request):
+#     if request.method == 'POST':
+#         goal = request.POST['goal']
 
-    RunTotalsModel.objects.create(
-        goal=goal
-    )
+#     RunTotalsModel.objects.create(
+#         goal=goal
+#     )
 
-    return render(request, 'addGoal.html')
+#     return render(request, 'addGoal.html')
 
 
 def charts(request):

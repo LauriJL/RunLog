@@ -9,6 +9,7 @@ function refreshPage(){
     }
 </script>
 <div>
+<div>
     <br />
     <h4>All Runs</h4>
     <br />
@@ -26,7 +27,7 @@ function refreshPage(){
             </tr>
         </thead>
         <tbody>
-            {% for result in dataLog %}
+            {% for result in page_obj %}
             <tr>
                 <td>{{result.run_date|date:'d.m.Y'}}</td>
                 <td>{{result.run_time}}</td>
@@ -48,6 +49,22 @@ function refreshPage(){
             {% endfor %}
         </tbody>
     </table>
-    
+</div>
+<div class="footer mt-auto py-3 bg-light" style="padding:5px 5px 5px 5px">
+    <span class="step-links">
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+        <br/>
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
 </div>
 {% endblock content %}

@@ -12,3 +12,10 @@ class RunLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = RunLogModel
         fields = '__all__'
+
+
+class RunTotalSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RunTotalsModel
+        fields = '__all__'
