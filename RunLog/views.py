@@ -1,4 +1,3 @@
-from cProfile import label
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import RunLogModel, RunTotalsModel
 from .serializers import RunLogSerializer, RunTotalSerializer
@@ -27,7 +26,6 @@ def showLog(request):
     # return render(request, 'log.html', {"dataLog": showall})
 
 
-# @api_view(['GET', 'POST'])
 def logJSON(request):
     if request.method == 'GET':
         showall = RunLogModel.objects.all().order_by('run_date')
@@ -47,23 +45,6 @@ def totalsJSON(request):
         serializer = RunTotalSerializer(showTotals, many=True)
         return render(request, 'totalsJSON.html', {'dataTotalsJSON': serializer.data})
         # return JsonResponse({'totals': serializer.data})
-
-    # def insertRun(request):
-    #     if request.method == "POST":
-    #         if request.POST.get('run_date') and request.POST.get('run_time') and request.POST.get('distance') and request.POST.get('pace') and request.POST.get('bpm') and request.POST.get('remarks'):
-    #             saverecord = RunLogModel()
-    #             saverecord.run_date = request.POST.get('run_date')
-    #             saverecord.run_time = request.POST.get('run_time')
-    #             saverecord.distance = request.POST.get('distance')
-    #             saverecord.pace = request.POST.get('pace')
-    #             saverecord.bpm = request.POST.get('bpm')
-    #             saverecord.remarks = request.POST.get('remarks')
-    #             saverecord.save()
-    #             messages.success(request, 'Run on ' +
-    #                              saverecord.run_date + ' added successfully.')
-    #             return render(request, 'log.html')
-    #     else:
-    #         return render(request, 'log.html')
 
 
 def addRun(request):
@@ -124,17 +105,6 @@ def updateGoal(request, id):
         form.save()
         messages.success(request, 'Goal updated.')
         return render(request, 'editGoal.html', {'RunTotalsModel': updategoal})
-
-
-# def addGoal(request):
-#     if request.method == 'POST':
-#         goal = request.POST['goal']
-
-#     RunTotalsModel.objects.create(
-#         goal=goal
-#     )
-
-#     return render(request, 'addGoal.html')
 
 
 def charts(request):
@@ -203,4 +173,20 @@ def pace_chart(request):
     return JsonResponse(data={
         'labels': labels,
         'data': data,
+    })
+
+
+def goal_chart(request):
+    goal = []
+    total_distance = []
+
+    queryset = RunTotalsModel.objects.values(
+        'goal', 'total_distance')
+    for item in queryset:
+        goal.append(item['goal'])
+        total_distance.append(item['total_distance'])
+
+    return JsonResponse(data={
+        'goal': goal,
+        'total_distance': total_distance,
     })

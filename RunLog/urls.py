@@ -23,6 +23,7 @@ urlpatterns = [
     path('bpmChart', views.bpm_chart, name='bpmChart'),
     path('distanceChart', views.distance_chart, name='distanceChart'),
     path('paceChart', views.pace_chart, name='paceChart'),
+    path('goalChart', views.goal_chart, name='goalChart'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

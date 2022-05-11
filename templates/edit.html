@@ -5,8 +5,9 @@
 {% block content %}
 <div class="container">
     <body>
+        <br />
         <h3>Edit run</h3>
-        <hr/>
+        <br/>
 
         {% if messages %}
         {% for mess in messages %}
@@ -17,7 +18,6 @@
           </div>
         {% endfor %}
         {% endif %}
-        
         <form method="post" action="/update/{{RunLogModel.id}}">
             {% csrf_token %}
             <div class="mb-3">
@@ -26,7 +26,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Run time</label>
-                <input type="text" name="run_time" class="form-control" value="{{RunLogModel.run_time}}">
+                <input type="text" name="run_time" class="form-control" value="{{RunLogModel.run_time|time:'H:i:s'}}" >
             </div>
             <div class="mb-3">
                 <label class="form-label">Distance</label>
@@ -34,7 +34,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Pace</label>
-                <input type="text" name="pace" class="form-control" value="{{RunLogModel.pace}}">
+                <input type="text" name="pace" class="form-control" value="{{RunLogModel.pace|time:'i:s'}}">
             </div>
             <div class="mb-3">
                 <label class="form-label">BPM</label>

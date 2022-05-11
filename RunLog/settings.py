@@ -114,8 +114,9 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer"
     ),
-    'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%dT%H:%M:%S.%fZ'],
-    'TIME_INPUT_FORMATS': ('%H-%M-%S'),
+    # 'DATE_INPUT_FORMATS': ['iso-8601', '%Y-%m-%dT%H:%M:%S.%fZ'],
+    'DATE_INPUT_FORMATS': ['%d.%m.%Y'],
+    # 'TIME_INPUT_FORMATS': [('%h:%m:%s')],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
