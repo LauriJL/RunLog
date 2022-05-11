@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <body>
+        <br/>
+        {% if RunTotalsModel.goal %}
+        <h4>Edit goal</h4>
+        {% else %}
+        <h4>Add goal</h4>
+        {% endif %}
+        <br/>
+
+        {% if messages %}
+        {% for mess in messages %}
+        <div class="alert alert-success" role="alert">
+            <p><span>{{mess}}</span></p>
+            <hr/>
+            <a href="{% url 'goal' %}" class="btn btn-secondary" role="button">Back to Goal</a>
+          </div>
+        {% endfor %}
+        {% endif %}
+        
+        <form method="post" action="/updateGoal/{{RunTotalsModel.id}}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Goal for this year</label>
+                <input type="text" name="goal" class="form-control" value="{{RunTotalsModel.goal}}">
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a href="{% url 'goal' %}" class="btn btn-secondary" role="button">Back</a>
+            </div>
+        </form>
+    </body>
+</div>
+
+{% endblock content %}

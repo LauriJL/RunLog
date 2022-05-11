@@ -1,15 +1,16 @@
 from cProfile import label
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import RunLogModel, RunTotalsModel
 from .serializers import RunLogSerializer, RunTotalSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
+#from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from .forms import runForms, totalForms
+from django.shortcuts import render
 
 
 def showTotals(request):
@@ -26,47 +27,26 @@ def showLog(request):
     # return render(request, 'log.html', {"dataLog": showall})
 
 
-@api_view(['GET', 'POST'])
+# @api_view(['GET', 'POST'])
 def logJSON(request):
     if request.method == 'GET':
         showall = RunLogModel.objects.all().order_by('run_date')
-        paginator = Paginator(showall, 20)
-        page = request.QUERY_PARAMS.get('page')
         serializer = RunLogSerializer(showall, many=True)
-        paginator = Paginator(serializer.data, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        return render(request, 'logJSON.html', {"page_obj": page_obj})
-        return render(request, 'logJSON.html', {"dataLog": serializer.data})
-        return Response(serializer.data)
+        # return JsonResponse({'runs': serializer.data})
+        return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
     if request.method == 'POST':
         serializer = RunLogSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def logJSON_detail(request, id):
-
-    try:
-        run = RunLogModel.objects.get(pk=id)
-    except RunLogModel.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+def totalsJSON(request):
     if request.method == 'GET':
-        serializer = RunLogSerializer(run)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = RunLogSerializer(run, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        run.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        showTotals = RunTotalsModel.objects.all()
+        serializer = RunTotalSerializer(showTotals, many=True)
+        return render(request, 'totalsJSON.html', {'dataTotalsJSON': serializer.data})
+        # return JsonResponse({'totals': serializer.data})
 
     # def insertRun(request):
     #     if request.method == "POST":
@@ -117,7 +97,7 @@ def updateRun(request, id):
     form = runForms(request.POST, instance=updaterun)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Run updated OK')
+        messages.success(request, 'Run updated.')
         return render(request, 'edit.html', {'RunLogModel': updaterun})
 
 
@@ -130,6 +110,20 @@ def deleteRun(request, id):
 def goal(request):
     showall = RunTotalsModel.objects.all()
     return render(request, 'goal.html', {"dataTotals": showall})
+
+
+def editGoal(request, id):
+    editgoal = RunTotalsModel.objects.get(id=id)
+    return render(request, 'editGoal.html', {'RunTotalsModel': editgoal})
+
+
+def updateGoal(request, id):
+    updategoal = RunTotalsModel.objects.get(id=id)
+    form = totalForms(request.POST, instance=updategoal)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Goal updated.')
+        return render(request, 'editGoal.html', {'RunTotalsModel': updategoal})
 
 
 # def addGoal(request):

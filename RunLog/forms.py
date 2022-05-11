@@ -12,4 +12,4 @@ class runForms(forms.ModelForm):
 class totalForms(forms.ModelForm):
     class Meta:
         model = RunTotalsModel
-        fields = "__all__"
+        fields = 'goal',

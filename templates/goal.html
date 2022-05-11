@@ -10,8 +10,10 @@
     <br />
     {% for total in dataTotals %}
     {% if not total.goal %}
-    <p>Please set a goal for this year!</p>
+    <p>No goal set for this year.</p>
+    <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Set Goal</button></a>
     {% endif %}
+
     {% if total.goal %}
     <div class="row row-cols-3 row-cols-md-3 g-4">
         <div class="col">
@@ -45,6 +47,8 @@
             </div>
         </div>
     </div>
+    <br/>
+    <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Edit Goal</button></a>
     {% endif %}
     {% endfor %}
     
