@@ -17,13 +17,16 @@
   <ul class="nav nav-tabs nav-fill">
     <li class="nav-item">
       <a class="nav-link" href="#a" data-toggle="tab">BPM</a>
-     </li>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="#b" data-toggle="tab">Pace</a>
-     </li>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="#c" data-toggle="tab">Distance</a>
-     </li>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#d" data-toggle="tab">Combined</a>
+    </li>
  </ul>
  
  <div class="tab-content">
@@ -44,6 +47,12 @@
       <h4>Distance</h4>
       <br/>
      <canvas id="distanceChart" data-url="{% url 'distanceChart' %}" style="height:7vw;width:20vw"></canvas>
+    </div>
+    <div class="tab-pane" id="d">
+      <br />
+      <h4>Combined</h4>
+      <br/>
+     <canvas id="combinedChart" data-url="{% url 'combinedChart' %}" style="height:7vw;width:20vw"></canvas>
     </div>
  </div>
 </div>
@@ -129,7 +138,7 @@ $.ajax({
       tooltips:{
             callbacks:{
               label: function(tooltipItem,data) {
-                return Number(tooltipItem.yLabel).toFixed(2)
+                return Number(tooltipItem.yLabel).toFixed(2)+' km'
               }
             }
           },
@@ -186,7 +195,7 @@ const NUMBER_CFG = {decimals: 2};
           tooltips:{
             callbacks:{
               label: function(tooltipItem,data) {
-                return Number(tooltipItem.yLabel).toFixed(2)
+                return Number(tooltipItem.yLabel).toFixed(2).replace('.','m')+'s'
               }
             }
           },
@@ -218,6 +227,90 @@ const NUMBER_CFG = {decimals: 2};
   }
   });
   });
+
+// Combined chart
+$(function () {
+  var $combinedChart = $("#combinedChart");
+  $.ajax({
+    url: $combinedChart.data("url"),
+    success: function (data) {
+    var ctx = $combinedChart[0].getContext("2d");
+    
+    var pace = data.pace
+    var bpm = data.bpm
+    var distance = data.distance
+    var labels = data.labels
+
+    const mixedChart = new Chart(ctx, {
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Pace',
+          type: 'line',
+          data: pace,
+          borderColor: "red",
+          borderRadius: '50px',
+          fill: 'none',
+          yAxisID: 'A'
+        },{
+          label: 'BPM',
+          type: 'line',
+          data: bpm,
+          borderColor: "blue",
+          // borderRadius: '50px',
+          backgroundColor: 'none',
+          fill: 'none',
+          yAxisID: 'C'
+        },{
+          label: 'Distance',
+          type: 'bar',
+          data: distance,
+          fill: true,
+          borderColor: "red",
+          borderRadius: '50px',
+          backgroundColor: "orange",
+          yAxisID: 'B'
+        }],
+      },
+      options:{
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+              id: 'A',
+              display: true,
+              position: 'right',
+              ticks:{
+                min: 4,
+                max: 8,
+                }
+            },{
+              id: 'B',
+              display: true,
+              position: 'left',
+              ticks:{
+                min: 0,
+                max: 20,
+              }
+            },{
+              id: 'C',
+              display: true,
+              position: 'right',
+              ticks:{
+                min: 100,
+                max: 160,
+              }
+            }]
+        }
+      }
+    })
+    }
+  })
+})
+
+
+
 </script>
 
 {% endblock content %}

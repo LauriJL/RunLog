@@ -190,3 +190,33 @@ def goal_chart(request):
         'goal': goal,
         'total_distance': total_distance,
     })
+
+
+def combined_chart(request):
+    raw_pace = []
+    pace = []
+    bpm = []
+    distance = []
+    labels = []
+
+    queryset = RunLogModel.objects.values(
+        'pace', 'bpm', 'distance', 'run_date').order_by('run_date')
+
+    for item in queryset:
+        labels.append(item['run_date'])
+        raw_pace.append(item['pace'])
+        bpm.append(item['bpm'])
+        distance.append(item['distance'])
+
+    str1 = ','.join(str(e) for e in raw_pace)
+    str2 = str1.split(',')
+
+    pace = [i.replace('0:', '') for i in str2]
+    pace = [i.replace(':', '.') for i in pace]
+
+    return JsonResponse(data={
+        'labels': labels,
+        'pace': pace,
+        'bpm': bpm,
+        'distance': distance
+    })
