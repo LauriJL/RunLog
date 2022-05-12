@@ -3,6 +3,7 @@
 {% block title %}Run Log - Overview{% endblock title %}
 
 {% block content %}
+{% load convert %}
 
 <div>
     <br />
@@ -39,16 +40,22 @@
                     <h4 class="card-title">You have this far to go...</h4>
                     <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
                     {% endif %}
-                    {% if total.togo <= 0 %}
+                    {% if total.togo == 0 %}
                     <h4 class="card-title">Goal reached! <i style="color:green;" class="fas fa-light fa-trophy"></i></h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">Exactly {{total.total_distance}} km run! </p>
+                    {% endif %}
+                    {% if total.togo < 0 %}
+                    <h4 class="card-title">Goal reached! <i style="color:cyan;" class="fas fa-light fa-trophy"></i></h4>
+                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{ total.togo|convert_to_positive }} km over your goal!</p>
                     {% endif %}
                 </div>
             </div>
         </div>
+
+        <canvas id="goalChart" height="20" data-url="{% url 'goalChart' %}"></canvas>
+
     </div>
     <br/>
-    <canvas id="goalChart" height="20" data-url="{% url 'goalChart' %}"></canvas>
     <br/>
     <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Edit Goal</button></a>
     {% endif %}
@@ -68,6 +75,15 @@
             var total = data.total_distance[0]
             var goal = data.goal[0]
             var togo = goal - total
+            var max_value = goal
+            var togo_color = "lightgrey"
+
+            if (total > goal){
+                togo = togo * -1
+                total = goal
+                togo_color = 'cyan'
+                max_value = total+togo
+            }
             new Chart(ctx, 
             {type: 'horizontalBar',
             data: {
@@ -77,7 +93,7 @@
                     backgroundColor: "green",
                 }, {
                     data: [togo],
-                    backgroundColor: "lightgrey",
+                    backgroundColor: togo_color,
                 },]         
                 },
             options: {
@@ -91,10 +107,13 @@
                 xAxes: [{
                     display: true,
                     stacked: true,
+                    ticks:{
+                        max: max_value
+                    }
                 }],
                 yAxes: [{
                     display: false,
-                    stacked: true,
+                    stacked: true,              
             }],
             }
             }
