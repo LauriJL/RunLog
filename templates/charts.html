@@ -236,9 +236,21 @@ $(function () {
     success: function (data) {
     var ctx = $combinedChart[0].getContext("2d");
     
-    var pace = data.pace
+    var pace = data.pace   
+    // Tooltips for pace
+    pace_tooltip = []
+    for (var i = 0; i < pace.length; i++){
+      pace_tooltip.push(pace[i].slice(2).replace('.','m')+'s')
+    }
+
     var bpm = data.bpm
     var distance = data.distance
+    // Tooltips for distance
+    distance_tooltip = []
+    for (var i = 0; i < distance.length; i++){
+      distance_tooltip.push(distance[i]+' km')
+    }
+
     var labels = data.labels
 
     const mixedChart = new Chart(ctx, {
@@ -269,10 +281,21 @@ $(function () {
           borderColor: "red",
           borderRadius: '50px',
           backgroundColor: "orange",
-          yAxisID: 'B'
+          yAxisID: 'B',
         }],
       },
       options:{
+        tooltips:{
+            callbacks:{
+              label: function(t,d) {
+                var xLabel = d.datasets[t.datasetIndex].label;
+                var yLabel = t.yLabel;
+                if (t.datasetIndex === 0) return xLabel + ': ' + yLabel.toFixed(2).replace('.','m')+'s';
+                else if (t.datasetIndex === 1) return xLabel + ': ' + yLabel;
+                else if (t.datasetIndex === 2) return xLabel + ': '+ yLabel.toFixed(2) + ' km'
+              }
+            }
+          },
         scales: {
           xAxes: [{
             display: true
