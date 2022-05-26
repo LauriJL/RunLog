@@ -16,7 +16,7 @@
     <h3>All Totals Before {% now 'Y' %}</h3>
     <br />
     <ul class="nav nav-tabs">
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="tab" onClick="window.location.reload();">All</a>
         </li>
         {% for x in dataArchiveTotals %}
@@ -125,9 +125,9 @@
                     {% if x.togo <= 0 %}
                     <div class="card border border-success">
                         <div class="card-body">                            
-                            <p class="card-text"> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> km reached! 
+                            <p class="card-text"> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> km reached! <i style="color:green;" class="fas fa-light fa-trophy"></i>
                                 {% if x.togo|convert_to_positive  > 0%}
-                                <i style="color:green;" class="fas fa-light fa-trophy"></i> {{x.togo|convert_to_positive}} km over your goal!</p>
+                                {{x.togo|convert_to_positive}} km over your goal!</p>
                                 {% endif %}
                                 <p></p>
                          </div>
