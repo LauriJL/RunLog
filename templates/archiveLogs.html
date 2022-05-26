@@ -4,17 +4,12 @@
 
 {% block content %}
 
-<script>
-function refreshPage(){
-    window.location.reload();
-    }
-</script>
 <div>
     <br />
-    <h3>Log for {% now 'Y' %}</h3>
+    <h3>All Runs Before {% now 'Y' %}</h3>
     <br />
     <table class="table table-sm">
-        <thead class="thead-dark rounded" style="background-color: #FCEDDA;">
+        <thead class="thead-dark rounded" style="background-color: #FCEDDA">
             <tr>
                 <th style="width: 12.5%">Date</th>
                 <th style="width: 10%">Time</th>
@@ -27,7 +22,7 @@ function refreshPage(){
             </tr>
         </thead>
         <tbody>          
-            {% for x in dataLogJSON %}
+            {% for x in dataArchiveLog %}
             <tr>
                 <td>{{x.run_date}}</td>
                 <td>{{x.run_time}}</td>
@@ -36,19 +31,10 @@ function refreshPage(){
                 <td>{{x.bpm}}</td>
                 <td>{{x.remarks}}</td>
                 <td style="display:none">{{x.yr}}</td>
-                <td style="background-color:#FDFEFE; border:none">
-                    <a href="edit/{{x.id}}">
-                        <i title="Edit" style="color: green;" class="fas fa-solid fa-pen-to-square"></i>
-                    </a>
-                </td>
-                <td style="background-color:#FDFEFE; border:none">
-                    <a href="{% url 'deleteRun' x.id %}">
-                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i>
-                    </a>
-                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>    
 </div>
+
 {% endblock content %}

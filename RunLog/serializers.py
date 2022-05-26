@@ -1,6 +1,5 @@
 from dataclasses import fields
 from email.policy import default
-#from types import NoneType
 from rest_framework import serializers
 from datetime import datetime
 from .models import RunLogModel, RunTotalsModel
@@ -12,6 +11,7 @@ class RunLogSerializer(serializers.ModelSerializer):
     distance = serializers.DecimalField(max_digits=5, decimal_places=2)
     pace = serializers.TimeField(format="%Mm%Ss")
     run_time = serializers.TimeField(format="%Hh%Mm%Ss")
+    yr = serializers.IntegerField()
 
     class Meta:
         model = RunLogModel
@@ -35,4 +35,18 @@ class RunTotalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RunTotalsModel
+        fields = '__all__'
+
+
+class dateSerializer(serializers.ModelSerializer):
+    #run_date = serializers.DateField(format="%Y")
+    #run_date = serializers.SerializerMethodField('get_yr')
+    run_date = serializers.DateField()
+
+    def get_yr(self, obj):
+        return obj.run_date.year
+
+    class Meta:
+        model = RunLogModel
+        #fields = ('run_date', )
         fields = '__all__'

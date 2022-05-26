@@ -12,7 +12,7 @@
         <title>Run Log</title>
 </head>
 <body class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: peachpuff">
         <div class="container-fluid">
           <a class="navbar-brand" href="{% url 'showTotals' %}"><h2><i class="fa-solid fa-person-running"></i> Run Log</h2></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,17 +29,22 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'goal' %}">Goal</a>
               </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Archive
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{% url 'archiveTotals' %}">Totals</a></li>
+                  <li><a class="dropdown-item" href="{% url 'archiveLogs' %}">Runs</a></li>
+                  <li><a class="dropdown-item" href="{% url 'archiveCharts' %}">Charts</a></li>
+                </ul>
+              </li>
             </ul>
           </div>
           <div class="nav navbar-nav navbar-right">
             <li>
-                <div class="btn-nav"><a class="nav-link active" aria-current="page" href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:blue;" class="fas fa-solid fa-circle-plus fa-2xl"></i></a>
+                <div class="btn-nav"><a class="nav-link active" aria-current="page" href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:#EE4E34;" class="fas fa-solid fa-circle-plus fa-2xl"></i></a>
                 </div>
-            </li>
-            <li>
-              <!-- <div>
-                <button role="button" class="btn btn-link" onClick="refreshPage()"><i title="Refresh" style="color: green;" class="fas fa-solid fa-arrows-rotate fa-2xl"></i></button>
-              </div> -->
             </li>
           </div>
         </div>
@@ -94,7 +99,7 @@
           {% block content %}
           {% endblock content %}
         </div>
-      </main>
+    </main>
 </body>
 </html>
 <script type="text/javascript">

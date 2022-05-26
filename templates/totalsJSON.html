@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Run Log - Overview{% endblock title %}
+{% block title %}Run Log{% endblock title %}
 
 {% block content %}
 <script>
@@ -9,6 +9,9 @@
         }
 </script>
 <div>
+    <br />
+    <h3>Runs in {% now 'Y' %}</h3>
+
     {% for x in dataTotalsJSON %}
     <br />
     <div class="row row-cols-3 row-cols-md-3 g-4">

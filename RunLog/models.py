@@ -9,6 +9,11 @@ class RunLogModel(models.Model):
     bpm = models.IntegerField()
     remarks = models.TextField(blank=True)
     run_time = models.TimeField()
+    yr = models.IntegerField()
+
+    @property
+    def yr(self):
+        return int(self.run_date.strftime('%Y'))
 
     def __str__(self):
         return str(self.run_date)
@@ -26,6 +31,7 @@ class RunTotalsModel(models.Model):
     average_bpm = models.IntegerField()
     average_runtime = models.TimeField()
     goal = models.IntegerField()
+    yr = models.IntegerField()
 
     @property
     def togo(self):

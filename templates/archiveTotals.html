@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log - Totals archive{% endblock title %}
+
+{% block content %}
+{% load convert %}
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+<div class="container">
+    <br />
+    <h3>All Totals Before {% now 'Y' %}</h3>
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-toggle="tab" onClick="window.location.reload();">All</a>
+        </li>
+        {% for x in dataArchiveTotals %}
+        <li class="nav-item">
+            <a class="nav-link" href="#{{x.yr}}" data-toggle="tab">{{x.yr}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div>
+    <div class="tab-content">
+        {% for x in dataArchiveTotals %}
+        <div class="tab-pane active" id="{{x.yr}}">
+            <br/>
+            <h4>{{x.yr}}</h4>
+            <br/>
+            <div class="row row-cols-3 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Total Distance</h4>
+                            <p class="card-text">{{ x.total_distance}} km</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Average Distance</h4>
+                            <p class="card-text">{{x.average_distance}} km</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Furthest Distance</h4>
+                            <p class="card-text">{{x.furthest_distance}} km</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Average Pace</h4>
+                            <p class="card-text">{{x.average_pace}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Fastest Pace</h4>
+                            <p class="card-text">{{x.fastest_pace}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Average Runtime</h4>
+                            <p class="card-text">{{x.average_runtime}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Average BPM</h4>
+                            <p class="card-text">{{x.average_bpm}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    {% if x.goal == 0 %}
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Goal</h4>
+                            <p class="card-text">No goal set for this year.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if x.goal %}
+                    <div class="card border border-primary">
+                        <div class="card-body">
+                            <h4 class="card-title">Goal</h4>
+                            <p class="card-text">{{x.goal}} km</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if x.goal > 0 %}
+                <div class="col">
+                    {% if x.togo > 0 %}
+                    <div class="card border border-danger">
+                        <div class="card-body">                          
+                            <p class="card-text"> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> missed by <b>{{x.togo}}</b> km.
+                            <i style="color:red" class="fas fa-light fa-face-frown fa-lg"></i></p>
+                            <p></p>                       
+                            {% if total.togo <= 0 %}
+                            <p class="card-text" style="font-weight:bold">Goal reached! {{x.togo}} km ({{x.goal}} km <i style="color:green;" class="fas fa-light fa-trophy"></i></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if x.togo <= 0 %}
+                    <div class="card border border-success">
+                        <div class="card-body">                            
+                            <p class="card-text"> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> km reached! 
+                                {% if x.togo|convert_to_positive  > 0%}
+                                <i style="color:green;" class="fas fa-light fa-trophy"></i> {{x.togo|convert_to_positive}} km over your goal!</p>
+                                {% endif %}
+                                <p></p>
+                         </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -8,7 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.totalsJSON, name="showTotals"),
     path('logJSON', views.logJSON, name="showLog"),
-    path('logJSON', views.logJSON),
+    # path('logJSON', views.logJSON),
     path('totalsJSON', views.totalsJSON, name='totalsJSON'),
     path('addRun', views.addRun),
     path('edit/<id>', views.editRun, name="editRun"),
@@ -25,6 +25,12 @@ urlpatterns = [
     path('paceChart', views.pace_chart, name='paceChart'),
     path('goalChart', views.goal_chart, name='goalChart'),
     path('combinedChart', views.combined_chart, name='combinedChart'),
+    path('archiveTotals', views.archiveTotals, name='archiveTotals'),
+    path('archiveLogs', views.archiveLogs, name='archiveLogs'),
+    path('archiveCharts', views.archiveCharts, name='archiveCharts'),
+    path('archiveChartData', views.archive_chart, name='archiveChartData'),
+
+    path('years', views.getYears, name='years')
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+{% load static %}
+<link ref="stylesheet" type="text/css" href="{% static 'RunLog/styles.css' %}"/>
+<br />
+<h3>Charts for All Runs Before {% now 'Y' %} (combined)</h3>
+
+<div class="container">
+    <br />
+    <canvas id="archiveCharts" data-url="{% url 'archiveChartData' %}" style="height:7vw;width:20vw"></canvas>
+</div>
+
+<script>
+$(function () {
+  var $archiveChartData = $("#archiveCharts");
+  $.ajax({
+    url: $archiveChartData.data("url"),
+    success: function (data) {
+    var ctx = $archiveChartData[0].getContext("2d");
+    
+    var pace = data.pace   
+    // Tooltips for pace
+    pace_tooltip = []
+    for (var i = 0; i < pace.length; i++){
+      pace_tooltip.push(pace[i].slice(2).replace('.','m')+'s')
+    }
+
+    var bpm = data.bpm
+    var distance = data.distance
+    // Tooltips for distance
+    distance_tooltip = []
+    for (var i = 0; i < distance.length; i++){
+      distance_tooltip.push(distance[i]+' km')
+    }
+
+    var labels = data.labels
+
+    const mixedChart = new Chart(ctx, {
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Pace',
+          type: 'line',
+          data: pace,
+          borderColor: "red",
+          borderRadius: '50px',
+          fill: 'none',
+          yAxisID: 'A'
+        },{
+          label: 'BPM',
+          type: 'line',
+          data: bpm,
+          borderColor: "blue",
+          // borderRadius: '50px',
+          backgroundColor: 'none',
+          fill: 'none',
+          yAxisID: 'C'
+        },{
+          label: 'Distance',
+          type: 'bar',
+          data: distance,
+          fill: true,
+          borderColor: "red",
+          borderRadius: '50px',
+          backgroundColor: "orange",
+          yAxisID: 'B',
+        }],
+      },
+      options:{
+        tooltips:{
+            callbacks:{
+              label: function(t,d) {
+                var xLabel = d.datasets[t.datasetIndex].label;
+                var yLabel = t.yLabel;
+                if (t.datasetIndex === 0) return xLabel + ': ' + yLabel.toFixed(2).replace('.','m')+'s';
+                else if (t.datasetIndex === 1) return xLabel + ': ' + yLabel;
+                else if (t.datasetIndex === 2) return xLabel + ': '+ yLabel.toFixed(2) + ' km'
+              }
+            }
+          },
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+              id: 'A',
+              display: true,
+              position: 'right',
+              ticks:{
+                min: 4,
+                max: 8,
+                }
+            },{
+              id: 'B',
+              display: true,
+              position: 'left',
+              ticks:{
+                min: 0,
+                max: 20,
+              }
+            },{
+              id: 'C',
+              display: true,
+              position: 'right',
+              ticks:{
+                min: 100,
+                max: 160,
+              }
+            }]
+        }
+      }
+    })
+    }
+  })
+})
+</script>
+{% endblock content %}

@@ -1,15 +1,22 @@
+import datetime
+from datetime import date
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import RunLogModel, RunTotalsModel
-from .serializers import RunLogSerializer, RunTotalSerializer
+from .serializers import RunLogSerializer, RunTotalSerializer, dateSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-#from rest_framework.pagination import PageNumberPagination
+# from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from .forms import runForms, totalForms
 from django.shortcuts import render
+
+# Globals
+currentYear = int(datetime.date.today().year)
+firstDay = date(date.today().year, 1, 1)
+lastDay = date(date.today().year, 12, 31)
 
 
 def showTotals(request):
@@ -26,9 +33,11 @@ def showLog(request):
     # return render(request, 'log.html', {"dataLog": showall})
 
 
+@api_view(['GET', 'POST'])
 def logJSON(request):
     if request.method == 'GET':
-        showall = RunLogModel.objects.all().order_by('run_date')
+        showall = RunLogModel.objects.filter(
+            run_date__range=[firstDay, lastDay]).order_by('run_date')
         serializer = RunLogSerializer(showall, many=True)
         # return JsonResponse({'runs': serializer.data})
         return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
@@ -37,11 +46,14 @@ def logJSON(request):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def totalsJSON(request):
     if request.method == 'GET':
-        showTotals = RunTotalsModel.objects.all()
+        showTotals = RunTotalsModel.objects.filter(yr=currentYear)
+        # showTotals = RunTotalsModel.objects.all()
         serializer = RunTotalSerializer(showTotals, many=True)
         return render(request, 'totalsJSON.html', {'dataTotalsJSON': serializer.data})
         # return JsonResponse({'totals': serializer.data})
@@ -62,7 +74,7 @@ def addRun(request):
             distance=distance,
             pace=pace,
             bpm=bpm,
-            remarks=remarks
+            remarks=remarks,
         )
 
         return render(request, 'log.html')
@@ -89,7 +101,7 @@ def deleteRun(request, id):
 
 
 def goal(request):
-    showall = RunTotalsModel.objects.all()
+    showall = RunTotalsModel.objects.filter(yr=currentYear)
     return render(request, 'goal.html', {"dataTotals": showall})
 
 
@@ -124,7 +136,8 @@ def bpm_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'bpm', 'run_date').order_by('run_date')
+        'bpm', 'run_date').filter(
+            run_date__range=[firstDay, lastDay]).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])
@@ -141,7 +154,8 @@ def distance_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'distance', 'run_date').order_by('run_date')
+        'distance', 'run_date').filter(
+            run_date__range=[firstDay, lastDay]).order_by('run_date')
     for item in queryset:
         labels.append(item['run_date'])
         data.append(item['distance'])
@@ -158,7 +172,8 @@ def pace_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'pace', 'run_date').order_by('run_date')
+        'pace', 'run_date').filter(
+            run_date__range=[firstDay, lastDay]).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])
@@ -181,7 +196,7 @@ def goal_chart(request):
     total_distance = []
 
     queryset = RunTotalsModel.objects.values(
-        'goal', 'total_distance')
+        'goal', 'total_distance').filter(yr=currentYear)
     for item in queryset:
         goal.append(item['goal'])
         total_distance.append(item['total_distance'])
@@ -200,7 +215,68 @@ def combined_chart(request):
     labels = []
 
     queryset = RunLogModel.objects.values(
-        'pace', 'bpm', 'distance', 'run_date').order_by('run_date')
+        'pace', 'bpm', 'distance', 'run_date').filter(
+            run_date__range=[firstDay, lastDay]).order_by('run_date')
+
+    for item in queryset:
+        labels.append(item['run_date'])
+        raw_pace.append(item['pace'])
+        bpm.append(item['bpm'])
+        distance.append(item['distance'])
+
+    str1 = ','.join(str(e) for e in raw_pace)
+    str2 = str1.split(',')
+
+    pace = [i.replace('0:', '') for i in str2]
+    pace = [i.replace(':', '.') for i in pace]
+
+    return JsonResponse(data={
+        'labels': labels,
+        'pace': pace,
+        'bpm': bpm,
+        'distance': distance
+    })
+
+
+def getYears(request):
+    if request.method == 'GET':
+        showYears = RunLogModel.objects.all().distinct('run_date')
+        serializer = dateSerializer(showYears, many=True)
+        # return JsonResponse({'years': serializer.data})
+        return render(request, 'years.html', {'showYears': serializer.data})
+
+
+def archiveTotals(request):
+    if request.method == 'GET':
+        showTotals = RunTotalsModel.objects.all().filter(yr__lt=currentYear)
+        serializer = RunTotalSerializer(showTotals, many=True)
+        return render(request, 'archiveTotals.html', {'dataArchiveTotals': serializer.data})
+        # return JsonResponse({'totalsArchive': serializer.data})
+
+
+def archiveLogs(request):
+    if request.method == 'GET':
+        showall = RunLogModel.objects.filter(
+            run_date__lte=firstDay).order_by('run_date')
+        serializer = RunLogSerializer(showall, many=True)
+        # return JsonResponse({'archivedRuns': serializer.data})
+        return render(request, 'archiveLogs.html', {'dataArchiveLog': serializer.data})
+
+
+def archiveCharts(request):
+    return render(request, 'archiveCharts.html')
+
+
+def archive_chart(request):
+    raw_pace = []
+    pace = []
+    bpm = []
+    distance = []
+    labels = []
+
+    queryset = RunLogModel.objects.values(
+        'pace', 'bpm', 'distance', 'run_date').filter(
+            run_date__lte=firstDay).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])
