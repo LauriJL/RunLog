@@ -1,12 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.totalsJSON, name="showTotals"),
+    path('', views.index, name="index"),
     path('logJSON', views.logJSON, name="showLog"),
     # path('logJSON', views.logJSON),
     path('totalsJSON', views.totalsJSON, name='totalsJSON'),
@@ -29,6 +29,8 @@ urlpatterns = [
     path('archiveLogs', views.archiveLogs, name='archiveLogs'),
     path('archiveCharts', views.archiveCharts, name='archiveCharts'),
     path('archiveChartData', views.archive_chart, name='archiveChartData'),
+    path('users/', include('django.contrib.auth.urls')),
+    path('users/', include('users.urls')),
 
     path('years', views.getYears, name='years')
 ]

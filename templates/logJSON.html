@@ -10,7 +10,6 @@ function refreshPage(){
     }
 </script>
 <div>
-    <br />
     <h3>Log for {% now 'Y' %}</h3>
     <br />
     <table class="table table-sm">
@@ -22,12 +21,14 @@ function refreshPage(){
                 <th style="width: 12.5%">Pace (time/km)</th>
                 <th style="width: 10%">BPM</th>
                 <th style="width: 40%">Remarks</th>
+                <!-- <th style="width: 40%">User</th> -->
                 <th style="background-color:#FDFEFE; border:none"></th>
                 <th style="background-color:#FDFEFE; border:none"></th>
             </tr>
         </thead>
         <tbody>          
             {% for x in dataLogJSON %}
+            {% if x.username == 'Matti' %}
             <tr>
                 <td>{{x.run_date}}</td>
                 <td>{{x.run_time}}</td>
@@ -35,6 +36,7 @@ function refreshPage(){
                 <td>{{x.pace}}</td>
                 <td>{{x.bpm}}</td>
                 <td>{{x.remarks}}</td>
+                <!-- <td>{{x.username}}</td> -->
                 <td style="display:none">{{x.yr}}</td>
                 <td style="background-color:#FDFEFE; border:none">
                     <a href="edit/{{x.id}}">
@@ -47,6 +49,7 @@ function refreshPage(){
                     </a>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>    

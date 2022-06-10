@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+    <h3>Signup</h3>
+    <br/>
+    {% if form.errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>There was an error in the form. Try again.</strong> 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <form action="{% url 'register_user' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br/>
+        <br/>
+        <input type="submit" value="Submit" class="btn btn-primary">
+    </form>
+{% endblock content %}

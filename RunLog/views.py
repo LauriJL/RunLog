@@ -19,6 +19,10 @@ firstDay = date(date.today().year, 1, 1)
 lastDay = date(date.today().year, 12, 31)
 
 
+def index(request):
+    return render(request, 'index.html')
+
+
 def showTotals(request):
     showall = RunTotalsModel.objects.all()
     return render(request, 'totals.html', {"dataTotals": showall})

@@ -44,6 +44,10 @@
                 <label class="form-label">Remarks</label>
                 <input type="text" name="remarks" class="form-control" value="{{RunLogModel.remarks}}">
             </div>
+            <div class="mb-3">
+                <label class="form-label">User</label>
+                <input type="text" name="user" class="form-control" value="{{RunLogModel.username}}">
+            </div>
             <div>
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a href="{% url 'showLog' %}" class="btn btn-secondary" role="button">Back</a>

@@ -7,8 +7,8 @@ AS $BODY$
 BEGIN
 	DELETE FROM totals tot
 	WHERE
-  	    NOT tot.yr IN (select yr from runlog) OR
-  	    tot.yr IS NULL;
+  	NOT tot.yr IN (select yr from runlog) OR
+  	tot.yr IS NULL;
 	RETURN NULL;
 END
 $BODY$;

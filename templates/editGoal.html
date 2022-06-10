@@ -5,13 +5,11 @@
 {% block content %}
 <div class="container">
     <body>
-        <br/>
         {% if RunTotalsModel.goal %}
-        <h4>Edit goal</h4>
+        <h4>Edit Goal</h4>
         {% else %}
-        <h4>Add goal</h4>
+        <h4>Add Goal</h4>
         {% endif %}
-        <br/>
 
         {% if messages %}
         {% for mess in messages %}

@@ -9,10 +9,8 @@
         }
 </script>
 <div>
-    <br />
-    <h3>Runs in {% now 'Y' %}</h3>
-
     {% for x in dataTotalsJSON %}
+    <h3>Your Runs in {% now 'Y' %}</h3>
     <br />
     <div class="row row-cols-3 row-cols-md-3 g-4">
         <div class="col">
@@ -79,7 +77,7 @@
                     <p class="card-text">No goal set for this year. <a href="editGoal/{{x.id}}"><button class="btn btn-outline-primary"><i class="fas fa-light fa-trophy"></i> Set Goal</button></a></p>                   
                     {% endif %}
                     {% if x.goal and x.togo > 0 %}
-                    <p class="card-text">{{x.togo}} km (goal: {{x.goal}} km)</p>
+                    <p class="card-text">{{x.togo}} km (goal: <a href="{% url 'goal' %}" style="text-decoration: none;">{{x.goal}}</a> km)</p>
                     {% endif %}
                     {% if x.goal and x.togo <= 0 %}
                     <p class="card-text">Goal {{x.goal}} km reached ({{x.total_distance}} km run)! <a href="{% url 'goal' %}" class="btn-link"><i style="color:green;" class="fas fa-light fa-trophy"></i></a></p>
