@@ -67,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'RunDB',
         'USER': 'postgres',
-        'PASSWORD': 'Fawad4F8ka',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5433',
     }
@@ -92,6 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

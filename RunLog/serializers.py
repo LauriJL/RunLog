@@ -12,7 +12,7 @@ class RunLogSerializer(serializers.ModelSerializer):
     pace = serializers.TimeField(format="%Mm%Ss")
     run_time = serializers.TimeField(format="%Hh%Mm%Ss")
     yr = serializers.IntegerField()
-    #username = serializers.CharField()
+    username = serializers.CharField()
 
     class Meta:
         model = RunLogModel

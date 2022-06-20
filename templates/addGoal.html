@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Run Log{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <body>
+        <h4>Set goal for this year</h4>
+        
+        <form method="post" action="/addNewGoal">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="goal" class="form-control" value="{{RunTotalsModel.goal}}">
+            </div>
+            <div>
+                <button class="btn btn-primary" type="submit">Save</button>
+                <a href="{% url 'goal' %}" class="btn btn-secondary" role="button">Back</a>
+            </div>
+        </form>
+    </body>
+</div>
+
+{% endblock content %}

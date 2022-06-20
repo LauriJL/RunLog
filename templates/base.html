@@ -58,8 +58,8 @@
                 <i class="fa-regular fa-circle-user"></i> {{ user.get_username }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Personal data</a></li>
-                <li><a class="dropdown-item" href="#">User account</a></li>
+                <!-- <li><a class="dropdown-item" href="#">Personal data</a></li> -->
+                <!-- <li><a class="dropdown-item" href="#">User account</a></li> -->
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
@@ -109,10 +109,6 @@
                             <label class="form-label">Remarks</label>
                             <input type="text" name="remarks" class="form-control" id="remarks" placeholder="Remarks">
                         </div>
-                        <div class="mb-3">
-                          <label class="form-label">User</label>
-                          <input type="text" name="username" class="form-control" id="username" placeholder="Remarks">
-                      </div>
                         <!-- <div> -->
                         <div class="modal-footer">
                             {% csrf_token %}
@@ -154,6 +150,7 @@
               pace:$('#pace').val(),
               bpm:$('#bpm').val(),
               remarks:$('#remarks').val(),
+              username: 'Matti',
               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
           },
           success:function(data){

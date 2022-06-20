@@ -15,6 +15,8 @@ urlpatterns = [
     path('update/<id>', views.updateRun, name="updateRun"),
     path('delete/<id>/', views.deleteRun, name="deleteRun"),
     path('goal', views.goal, name='goal'),
+    path('addGoal', views.addGoal, name='addGoal'),
+    path('addNewGoal', views.addNewGoal),
     path('editGoal/<id>', views.editGoal, name='editGoal'),
     path('updateGoal/<id>', views.updateGoal, name='updateGoal'),
     path('charts', views.charts, name='charts'),

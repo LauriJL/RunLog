@@ -14,6 +14,7 @@ class RunLogModel(models.Model):
     run_time = models.TimeField()
     yr = models.IntegerField()
     username = models.TextField()
+    #username = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @property
     def yr(self):

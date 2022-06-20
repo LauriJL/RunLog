@@ -28,7 +28,6 @@ function refreshPage(){
         </thead>
         <tbody>          
             {% for x in dataLogJSON %}
-            {% if x.username == 'Matti' %}
             <tr>
                 <td>{{x.run_date}}</td>
                 <td>{{x.run_time}}</td>
@@ -49,7 +48,6 @@ function refreshPage(){
                     </a>
                 </td>
             </tr>
-            {% endif %}
             {% endfor %}
         </tbody>
     </table>    

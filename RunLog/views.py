@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .forms import runForms, totalForms
 from django.shortcuts import render
+from django.contrib.auth import get_user_model
 
 # Globals
 currentYear = int(datetime.date.today().year)
@@ -40,8 +41,8 @@ def showLog(request):
 @api_view(['GET', 'POST'])
 def logJSON(request):
     if request.method == 'GET':
-        showall = RunLogModel.objects.filter(
-            run_date__range=[firstDay, lastDay]).order_by('run_date')
+        showall = RunLogModel.objects.filter(username=request.user,
+                                             run_date__range=[firstDay, lastDay]).order_by('run_date')
         serializer = RunLogSerializer(showall, many=True)
         # return JsonResponse({'runs': serializer.data})
         return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
@@ -56,8 +57,8 @@ def logJSON(request):
 
 def totalsJSON(request):
     if request.method == 'GET':
-        showTotals = RunTotalsModel.objects.filter(yr=currentYear)
-        # showTotals = RunTotalsModel.objects.all()
+        showTotals = RunTotalsModel.objects.filter(
+            username=request.user, yr=currentYear)
         serializer = RunTotalSerializer(showTotals, many=True)
         return render(request, 'totalsJSON.html', {'dataTotalsJSON': serializer.data})
         # return JsonResponse({'totals': serializer.data})
@@ -79,6 +80,7 @@ def addRun(request):
             pace=pace,
             bpm=bpm,
             remarks=remarks,
+            username=request.user,
         )
 
         return render(request, 'log.html')
@@ -94,8 +96,9 @@ def updateRun(request, id):
     form = runForms(request.POST, instance=updaterun)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Run updated.')
-        return render(request, 'edit.html', {'RunLogModel': updaterun})
+        # messages.success(request, 'Run updated.')
+        # return render(request, 'edit.html', {'RunLogModel': updaterun})
+        return redirect('showLog')
 
 
 def deleteRun(request, id):
@@ -105,8 +108,29 @@ def deleteRun(request, id):
 
 
 def goal(request):
-    showall = RunTotalsModel.objects.filter(yr=currentYear)
+    showall = RunTotalsModel.objects.filter(
+        username=request.user, yr=currentYear)
     return render(request, 'goal.html', {"dataTotals": showall})
+
+
+def addGoal(request):
+    #editgoal = RunTotalsModel.objects.get(id=id)
+    return render(request, 'addGoal.html', {})
+
+
+def addNewGoal(request):
+    if request.method == 'POST':
+        goal = request.POST["goal"]
+        yr = currentYear
+        username = request.user
+
+        RunTotalsModel.objects.create(
+            goal=goal,
+            yr=yr,
+            username=username,
+        )
+
+        return redirect('goal')
 
 
 def editGoal(request, id):
@@ -119,8 +143,7 @@ def updateGoal(request, id):
     form = totalForms(request.POST, instance=updategoal)
     if form.is_valid():
         form.save()
-        messages.success(request, 'Goal updated.')
-        return render(request, 'editGoal.html', {'RunTotalsModel': updategoal})
+        return redirect('goal')
 
 
 def charts(request):
@@ -140,8 +163,8 @@ def bpm_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'bpm', 'run_date').filter(
-            run_date__range=[firstDay, lastDay]).order_by('run_date')
+        'bpm', 'run_date').filter(username=request.user,
+                                  run_date__range=[firstDay, lastDay]).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])
@@ -158,8 +181,8 @@ def distance_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'distance', 'run_date').filter(
-            run_date__range=[firstDay, lastDay]).order_by('run_date')
+        'distance', 'run_date').filter(username=request.user,
+                                       run_date__range=[firstDay, lastDay]).order_by('run_date')
     for item in queryset:
         labels.append(item['run_date'])
         data.append(item['distance'])
@@ -176,8 +199,8 @@ def pace_chart(request):
     data = []
 
     queryset = RunLogModel.objects.values(
-        'pace', 'run_date').filter(
-            run_date__range=[firstDay, lastDay]).order_by('run_date')
+        'pace', 'run_date').filter(username=request.user,
+                                   run_date__range=[firstDay, lastDay]).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])
@@ -200,7 +223,7 @@ def goal_chart(request):
     total_distance = []
 
     queryset = RunTotalsModel.objects.values(
-        'goal', 'total_distance').filter(yr=currentYear)
+        'goal', 'total_distance').filter(username=request.user, yr=currentYear)
     for item in queryset:
         goal.append(item['goal'])
         total_distance.append(item['total_distance'])
@@ -219,8 +242,8 @@ def combined_chart(request):
     labels = []
 
     queryset = RunLogModel.objects.values(
-        'pace', 'bpm', 'distance', 'run_date').filter(
-            run_date__range=[firstDay, lastDay]).order_by('run_date')
+        'pace', 'bpm', 'distance', 'run_date').filter(username=request.user,
+                                                      run_date__range=[firstDay, lastDay]).order_by('run_date')
 
     for item in queryset:
         labels.append(item['run_date'])

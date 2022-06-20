@@ -8,58 +8,63 @@
 <div>
     <h3>Goal for {% now 'Y' %}</h3>
     <br />
-    {% for total in dataTotals %}
-    {% if not total.goal %}
-    <p>No goal set for this year.</p>
-    <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Set Goal</button></a>
-    {% endif %}
+    {% if dataTotals %}
+        {% for total in dataTotals %}
+        {% if total.username == user.get_username %}
+            {% if not total.goal %}
+            <p>No goal set for this year.</p>
+            <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Set Goal</button></a>
+        {% endif %}
 
     {% if total.goal %}
-    <div class="row row-cols-3 row-cols-md-3 g-4">
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Your goal for this year is...</h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.goal}} km</p>
+        <div class="row row-cols-3 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Your goal for this year is...</h4>
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.goal}} km</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">So far you have run...</h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.total_distance}} km</p>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">So far you have run...</h4>
+                        {% if total.total_distance %}
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.total_distance}} km</p>
+                        {% else %}
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">0 km</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    {% if total.togo > 0%}
-                    <h4 class="card-title">You have this far to go...</h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
-                    {% endif %}
-                    {% if total.togo == 0 %}
-                    <h4 class="card-title">Goal reached! <i style="color:green;" class="fas fa-light fa-trophy"></i></h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">Exactly {{total.total_distance}} km run! </p>
-                    {% endif %}
-                    {% if total.togo < 0 %}
-                    <h4 class="card-title">Goal reached! <i style="color:cyan;" class="fas fa-light fa-trophy"></i></h4>
-                    <p style="font-size:135%;font-weight: bold;" class="card-text">{{ total.togo|convert_to_positive }} km over your goal!</p>
-                    {% endif %}
+            {% if total.togo != null %}
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        {% if total.togo > 0%}
+                        <h4 class="card-title">You have this far to go...</h4>
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
+                        {% elif total.togo == 0 %}
+                        <h4 class="card-title">Goal reached! <i style="color:green;" class="fas fa-light fa-trophy"></i></h4>
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">Exactly {{total.total_distance}} km run! </p>
+                        {% elif total.togo < 0 %}
+                        <h4 class="card-title">Goal reached! <i style="color:cyan;" class="fas fa-light fa-trophy"></i></h4>
+                        <p style="font-size:135%;font-weight: bold;" class="card-text">{{ total.togo|convert_to_positive }} km over your goal!</p>
+                        {% endif %}   
+                    </div>
                 </div>
             </div>
+            {% endif %}
+            <canvas id="goalChart" height="20" data-url="{% url 'goalChart' %}"></canvas>
         </div>
-
-        <canvas id="goalChart" height="20" data-url="{% url 'goalChart' %}"></canvas>
-
-    </div>
-    <br/>
-    <br/>
-    <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Edit Goal</button></a>
+        <br/>
+        <br/>
+        <a href="editGoal/{{total.id}}"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Edit Goal</button></a>
+    {% endif %}
     {% endif %}
     {% endfor %}
-    
+    {% endif %}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script>

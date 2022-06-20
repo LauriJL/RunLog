@@ -3,90 +3,124 @@
 {% block title %}Run Log{% endblock title %}
 
 {% block content %}
-<script>
-    function refreshPage(){
-        window.location.reload();
-        }
-</script>
 <div>
-    {% for x in dataTotalsJSON %}
-    <h3>Your Runs in {% now 'Y' %}</h3>
-    <br />
-    <div class="row row-cols-3 row-cols-md-3 g-4">
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Total Distance</h4>
-                    <p class="card-text">{{x.total_distance}} km</p>
+    {% if dataTotalsJSON %}
+        {% for x in dataTotalsJSON %}
+        {% if x.username == user.get_username %}  
+        <h3>Your Runs in {% now 'Y' %}</h3>
+        <br />
+        <div class="row row-cols-3 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Total Distance</h4>
+                        {% if x.total_distance %}
+                        <p class="card-text">{{x.total_distance}} km</p>
+                        {% else %}
+                        <p class="card-text">0 km</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Average Distance</h4>
+                        {% if x.average_distance %}
+                        <p class="card-text">{{x.average_distance}} km</p>
+                        {% else %}
+                        <p class="card-text">0 km</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Furthest Distance</h4>
+                        {% if x.furthest_distance %}
+                        <p class="card-text">{{x.furthest_distance}} km</p>
+                        {% else %}
+                        <p class="card-text">0 km</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Average Pace</h4>
+                        {% if x.average_pace %}
+                        <p class="card-text">{{x.average_pace}}</p>
+                        {% else %}
+                        <p class="card-text">00m00s</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Fastest Pace</h4>
+                        {% if x.fastest_pace %}
+                        <p class="card-text">{{x.fastest_pace}}</p>
+                        {% else %}
+                        <p class="card-text">00m00s</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Average Runtime</h4>
+                        {% if x.average_runtime %}
+                        <p class="card-text">{{x.average_runtime}}</p>
+                        {% else %}
+                        <p class="card-text">00h00m00s</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">Average BPM</h4>
+                        {% if x.average_runtime %}
+                        <p class="card-text">{{x.average_bpm}}</p>
+                        {% else %}
+                        <p class="card-text">0</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border border-primary">
+                    <div class="card-body">
+                        <h4 class="card-title">To Go</h4>
+                        {% if not x.goal %}
+                        <p class="card-text">No goal set for this year. <a href="editGoal/{{x.id}}"><button class="btn btn-outline-primary"><i class="fas fa-light fa-trophy"></i> Set Goal</button></a></p>                   
+                        {% endif %}
+                        {% if x.goal and x.togo > 0 %}
+                        <p class="card-text">{{x.togo}} km (goal: <a href="{% url 'goal' %}" style="text-decoration: none;">{{x.goal}}</a> km)</p>
+                        {% endif %}
+                        {% if x.goal and x.togo <= 0 %}
+                        <p class="card-text">Goal {{x.goal}} km reached ({{x.total_distance}} km run)! <a href="{% url 'goal' %}" class="btn-link"><i style="color:green;" class="fas fa-light fa-trophy"></i></a></p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Average Distance</h4>
-                    <p class="card-text">{{x.average_distance}} km</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Furthest Distance</h4>
-                    <p class="card-text">{{x.furthest_distance}} km</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Average Pace</h4>
-                    <p class="card-text">{{x.average_pace}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Fastest Pace</h4>
-                    <p class="card-text">{{x.fastest_pace}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Average Runtime</h4>
-                    <p class="card-text">{{x.average_runtime}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">Average BPM</h4>
-                    <p class="card-text">{{x.average_bpm}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card border border-primary">
-                <div class="card-body">
-                    <h4 class="card-title">To Go</h4>
-                    {% if not x.goal %}
-                    <p class="card-text">No goal set for this year. <a href="editGoal/{{x.id}}"><button class="btn btn-outline-primary"><i class="fas fa-light fa-trophy"></i> Set Goal</button></a></p>                   
-                    {% endif %}
-                    {% if x.goal and x.togo > 0 %}
-                    <p class="card-text">{{x.togo}} km (goal: <a href="{% url 'goal' %}" style="text-decoration: none;">{{x.goal}}</a> km)</p>
-                    {% endif %}
-                    {% if x.goal and x.togo <= 0 %}
-                    <p class="card-text">Goal {{x.goal}} km reached ({{x.total_distance}} km run)! <a href="{% url 'goal' %}" class="btn-link"><i style="color:green;" class="fas fa-light fa-trophy"></i></a></p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-    </div>
-    {% endfor %}
+        {% endif %}
+        {% endfor %}    
+    {% else %}
+    <h3>No runs logged in {% now 'Y' %}</h3>
+    <br/>
+    <p>
+        <a href="#addRunModal" role="button" class="btn btn-outline-primary" data-bs-toggle="modal"><i title="Add Run" style="color:#EE4E34;" class="fas fa-solid fa-circle-plus"></i> Add Run</a>   
+        <a href="addGoal"><button class="btn btn-outline-primary" ><i class="fas fa-light fa-trophy"></i> Set Goal</button></a>
+    </p>
+    {% endif %}
+    
 </div>
 {% endblock content %}
