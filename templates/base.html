@@ -51,7 +51,8 @@
             </ul>
           </div>
           <div class="nav navbar-nav navbar-right">
-            <div class="btn-nav"><a class="nav-link active" aria-current="page" href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:#EE4E34;" class="fas fa-solid fa-circle-plus"></i> Add Run</a>
+            <div class="btn-nav">
+              <a class="nav-link active" aria-current="page" href="#addRunModal" role="button" class="btn btn-link" data-bs-toggle="modal"><i title="Add Run" style="color:#EE4E34;" class="fas fa-solid fa-circle-plus"></i> Add Run</a>
             </div>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,7 +75,7 @@
           {% endif %}
           </div>
         </div>
-      </nav>
+    </nav>
       <div id="addRunModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -95,15 +96,15 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Distance</label>
-                            <input type="text" name="distance" class="form-control" id="distance" placeholder="Distance (km)">
+                            <input type="text" name="distance" class="form-control" id="distance" placeholder="0.00">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Pace</label>
-                            <input type="text" name="pace" class="form-control" id="pace" placeholder="Pace (time/km)">
+                            <input type="text" name="pace" class="form-control" id="pace" placeholder="hh:mm:ss">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">BPM</label>
-                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="BPM (average)">
+                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="000">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Remarks</label>
@@ -150,7 +151,7 @@
               pace:$('#pace').val(),
               bpm:$('#bpm').val(),
               remarks:$('#remarks').val(),
-              username: 'Matti',
+              //username: 'Matti',
               csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
           },
           success:function(data){

@@ -101,6 +101,13 @@ def updateRun(request, id):
         return redirect('showLog')
 
 
+def showRun(request, id):
+    showrun = RunLogModel.objects.filter(id=id)
+    serializer = RunLogSerializer(showrun, many=True)
+    # return JsonResponse({'runs': serializer.data})
+    return render(request, 'show.html', {'RunLogModel': serializer.data})
+
+
 def deleteRun(request, id):
     run = RunLogModel.objects.get(id=id)
     run.delete()

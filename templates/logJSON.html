@@ -43,9 +43,8 @@ function refreshPage(){
                     </a>
                 </td>
                 <td style="background-color:#FDFEFE; border:none">
-                    <a href="{% url 'deleteRun' x.id %}">
-                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i>
-                    </a>
+                    <a href="show/{{x.id}}">
+                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i></a>
                 </td>
             </tr>
             {% endfor %}
