@@ -1,6 +1,7 @@
 from dataclasses import fields
 from django import forms
 from .models import RunLogModel, RunTotalsModel
+from django.forms import ValidationError
 
 
 class runForms(forms.ModelForm):

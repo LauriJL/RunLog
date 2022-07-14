@@ -29,6 +29,15 @@
                 <td>{{x.pace}}</td>
                 <td>{{x.bpm}}</td>
                 <td>{{x.remarks}}</td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="edit/{{x.id}}">
+                        <i title="Edit" style="color: green;" class="fas fa-solid fa-pen-to-square"></i>
+                    </a>
+                </td>
+                <td style="background-color:#FDFEFE; border:none">
+                    <a href="show/{{x.id}}">
+                        <i title="Delete" style="color: red;" class="fas fa-solid fa-trash-can"></i></a>
+                </td>
                 <td style="display:none">{{x.yr}}</td>
             </tr>
             {% endfor %}

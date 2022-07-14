@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name="index"),
+    #path('pwd', views.change_password, name='change_password'),
     path('logJSON', views.logJSON, name="showLog"),
     # path('logJSON', views.logJSON),
     path('totalsJSON', views.totalsJSON, name='totalsJSON'),

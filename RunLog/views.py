@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from .forms import runForms, totalForms
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
+from django.forms import ValidationError
 
 # Globals
 currentYear = int(datetime.date.today().year)
@@ -42,7 +42,7 @@ def showLog(request):
 def logJSON(request):
     if request.method == 'GET':
         showall = RunLogModel.objects.filter(username=request.user,
-                                             run_date__range=[firstDay, lastDay]).order_by('run_date')
+                                             run_date__range=[firstDay, lastDay]).order_by('-run_date')
         serializer = RunLogSerializer(showall, many=True)
         # return JsonResponse({'runs': serializer.data})
         return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
@@ -99,6 +99,10 @@ def updateRun(request, id):
         # messages.success(request, 'Run updated.')
         # return render(request, 'edit.html', {'RunLogModel': updaterun})
         return redirect('showLog')
+    else:
+        messages.success(
+            request, 'Run not updated. Make sure you enter data in fields in correct format.')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def showRun(request, id):
@@ -186,6 +190,7 @@ def bpm_chart(request):
 def distance_chart(request):
     labels = []
     data = []
+    average = 0
 
     queryset = RunLogModel.objects.values(
         'distance', 'run_date').filter(username=request.user,
@@ -194,9 +199,12 @@ def distance_chart(request):
         labels.append(item['run_date'])
         data.append(item['distance'])
 
+    average = sum(data)/len(data)
+
     return JsonResponse(data={
         'labels': labels,
         'data': data,
+        'average': average,
     })
 
 

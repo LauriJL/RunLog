@@ -8,27 +8,40 @@
         <br />
         <h3>Edit run</h3>
         <br/>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span>{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
         <form method="post" action="/update/{{RunLogModel.id}}">
             {% csrf_token %}
             <div class="mb-3">
                 <label class="form-label">Date (yyyy-mm-dd)</label>
                 <input type="text" name="run_date" class="form-control" value="{{RunLogModel.run_date|date:'Y-m-d'}}" placeholder="yyyy-mm-dd">
+                <small>Date format should be yyyy-mm-dd. For example, May 9, 2022 would be <i>2022-05-09</i>.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">Run time</label>
-                <input type="text" name="run_time" class="form-control" value="{{RunLogModel.run_time|time:'H:i:s'}}" >
+                <input type="text" name="run_time" class="form-control" value="{{RunLogModel.run_time|time:'H:i:s'}}" required pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+                <small>Runtime format should be hh:mm:ss. For example, 1 hour 2 minutes 10 seconds woud be <i>01:02:10</i>.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">Distance</label>
                 <input type="text" name="distance" class="form-control" value="{{RunLogModel.distance}}">
+                <small>Enter distance in km, use digits and dot as separator. For example, <i>7.25</i>.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">Pace</label>
-                <input type="text" name="pace" class="form-control" value="{{RunLogModel.pace|time:'H:i:s'}}">
+                <input type="text" name="pace" class="form-control" value="{{RunLogModel.pace|time:'H:i:s'}}" required pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+                <small>Pace format should be hh:mm:ss. For example, 6 minutes 15 seconds would be <i>00:06:15</i>.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">BPM</label>
                 <input type="text" name="bpm" class="form-control" value="{{RunLogModel.bpm}}">
+                <small>Enter average BPM in digits. For example, <i>139</i>.</small>
             </div>
             <div class="mb-3">
                 <label class="form-label">Remarks</label>
@@ -39,6 +52,7 @@
                 <input type="text" name="username" class="form-control" value="{{RunLogModel.username}}">
             </div>
             <div>
+                {{ form.errors }}
                 <button class="btn btn-primary" type="submit">Save</button>
                 <a href="{% url 'showLog' %}" class="btn btn-secondary" role="button">Back</a>
             </div>

@@ -3,20 +3,25 @@ from typing_extensions import Required
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import RegexField
+from django.core.validators import RegexValidator
 
 
 class RunLogModel(models.Model):
     run_date = models.DateField()
-    distance = models.DecimalField(max_digits=5, decimal_places=2)
+    distance = models.DecimalField(
+        max_digits=5, decimal_places=2)
+    # distance = models.DecimalField(max_digits=5, decimal_places=2, validators=[RegexValidator(
+    #     regex='\d\d.\d\d', message='Check format!')])
     pace = models.TimeField()
     bpm = models.IntegerField()
     remarks = models.TextField(blank=True)
     run_time = models.TimeField()
     yr = models.IntegerField()
     username = models.TextField()
-    #username = models.ForeignKey(User, on_delete=models.CASCADE)
+    # username = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    @property
+    @ property
     def yr(self):
         return int(self.run_date.strftime('%Y'))
 
@@ -39,7 +44,7 @@ class RunTotalsModel(models.Model):
     yr = models.IntegerField()
     username = models.TextField()
 
-    @property
+    @ property
     def togo(self):
         return self.goal - self.total_distance
 

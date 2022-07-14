@@ -60,7 +60,8 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <!-- <li><a class="dropdown-item" href="#">Personal data</a></li> -->
-                <!-- <li><a class="dropdown-item" href="#">User account</a></li> -->
+                <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Your account</a></li>
+                <li><a class="dropdown-item" href="{% url 'change_password' %}">Change password</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
@@ -89,22 +90,27 @@
                         <div class="mb-3">
                             <label class="form-label">Date</label>
                             <input type="date" name="run_date" class="form-control" id="run_date">
+                            <small>Use the calendar icon to set run date.</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Run time</label>
-                            <input type="text" name="run_time" class="form-control" id="run_time" placeholder="hh:mm:ss">
+                            <input type="text" name="run_time" class="form-control" id="run_time" placeholder="hh:mm:ss" required pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+                            <small>Runtime format should be hh:mm:ss (e.g. 1h2m10s = <i>01:02:10</i>).</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Distance</label>
                             <input type="text" name="distance" class="form-control" id="distance" placeholder="0.00">
+                            <small>Enter distance in km, use digits and dot as separator.</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Pace</label>
-                            <input type="text" name="pace" class="form-control" id="pace" placeholder="hh:mm:ss">
+                            <input type="text" name="pace" class="form-control" id="pace" placeholder="hh:mm:ss" required pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+                            <small>Pace format should be hh:mm:ss (e.g. 6m15s = <i>00:06:15</i>).</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">BPM</label>
-                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="000">
+                            <input type="text" name="bpm" class="form-control" id="bpm" placeholder="000" maxlength="3">
+                            <small>Enter average BPM in digits.</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Remarks</label>
