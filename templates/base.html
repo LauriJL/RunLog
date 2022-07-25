@@ -10,6 +10,54 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <title>Run Log</title>
+        <script>
+          function validateForm() {
+            // var elem = document.forms.elements;
+            // Check date format
+            var date = document.forms["add_run_form"]["run_date"].value;
+            if (date == "" || date == null) {
+              alert("Enter a date.");
+              return false;
+            }
+            var timeFormat = new RegExp("^([0-9][0-9]:[0-9][0-9]:[0-9][0-9])$");
+            // Check run time format
+            var run_time = document.forms["add_run_form"]["run_time"].value;
+            if (timeFormat.test(run_time)) {
+                console.log("Valid runtime format.");
+            } else {
+                console.log("Invalid runtime format.");
+                alert("Wrong format for run time: " + run_time);
+                
+            }
+            // Check pace format
+            var pace = document.forms["add_run_form"]["pace"].value;
+            if (timeFormat.test(pace)) {
+                console.log("Valid  pace format.");
+            } else {
+                console.log("Invalid pace format.");
+                alert("Wrong format for pace: " + pace);
+            }
+            // Check distance
+            var distanceFormat = new RegExp("^([0-9])?[0-9](.[0-9][0-9])$");
+            var distance = document.forms["add_run_form"]["distance"].value;
+            if (distanceFormat.test(distance)) {
+                console.log("Valid distance format.");
+            } else {
+                console.log("Invalid distance format.");
+                alert("Wrong format for distance: " + distance);
+            }
+
+            // Check bpm
+            var bpmFormat = new RegExp("^([0-9])?[0-9][0-9]$");
+            var bpm = document.forms["add_run_form"]["bpm"].value;
+            if (bpmFormat.test(bpm)) {
+                console.log("Valid bpm format.");
+            } else {
+                alert("Wrong format for bpm: " + bpm);
+            }
+
+          }
+          </script>
 </head>
 <body class="container">
 
@@ -30,7 +78,7 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'showLog' %}">Log</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'showLog' %}">Runs</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'charts' %}">Charts</a>
@@ -85,11 +133,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="add_run_form" class="form">
+                    <form method="post" id="add_run_form" class="form" onsubmit="return validateForm()">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label class="form-label">Date</label>
-                            <input type="date" name="run_date" class="form-control" id="run_date">
+                            <input type="date" name="run_date" class="form-control" id="run_date" onsubmit ="return validateForm()">
                             <small>Use the calendar icon to set run date.</small>
                         </div>
                         <div class="mb-3">
@@ -119,7 +167,7 @@
                         <!-- <div> -->
                         <div class="modal-footer">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-success" id="btnAdd"><i class="fas fa-solid fa-check"></i></button>
+                            <button type="submit" onclick="return validateForm();" class="btn btn-success" id="btnAdd"><i class="fas fa-solid fa-check"></i></button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i></button>                   
                         </div>
                     </form>
@@ -132,7 +180,7 @@
           <style>
             body {background: lightgray;}
           </style>
-          <div class="shadow p-4 mb-5 bg-body rounded">
+          <div class="shadow p-4 mb-5 bg-body rounded" style="min-height: 85vh">
           {% block content %}
           {% endblock content %}
           </div>

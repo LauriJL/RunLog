@@ -4,14 +4,24 @@
 
 {% block content %}
 
-<script>
-function refreshPage(){
-    window.location.reload();
-    }
-</script>
-<div>
-    <h3>Log for {% now 'Y' %}</h3>
-    <br />
+<div class="container-fluid">
+    <h3>All Runs in {% now 'Y' %}</h3>
+    <p>{{ count }} runs in {% now 'Y' %}</p>
+    <p>
+       Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp;
+       {% if total > 2 and page.has_previous and page.previous_page_number != 1 %}
+       <a href="{% url 'showLog' %}?page={{ page.first }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-left"></i> First</a>
+       {% endif %}
+        {% if page.has_previous %}
+            <a href="{% url 'showLog' %}?page={{ page.previous_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-left"></i> Previous</a>
+        {% endif %}
+        {% if page.has_next %}
+            <a href="{% url 'showLog' %}?page={{ page.next_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-right"></i> Next</a>
+        {% endif %}
+        {% if total > 2 and page.has_next and page.next_page_number != total %}
+        <a href="{% url 'showLog' %}?page={{ total }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-right"></i> Last</a>
+        {% endif %}
+    </p>
     <table class="table table-sm">
         <thead class="thead-dark rounded" style="background-color: #FCEDDA;">
             <tr>
@@ -26,7 +36,7 @@ function refreshPage(){
             </tr>
         </thead>
         <tbody>          
-            {% for x in dataLogJSON %}
+            {% for x in page.object_list %}
             <tr>
                 <td>{{x.run_date}}</td>
                 <td>{{x.run_time}}</td>
@@ -47,6 +57,7 @@ function refreshPage(){
             </tr>
             {% endfor %}
         </tbody>
-    </table>    
-</div>
+    </table>
+</div> 
+
 {% endblock content %}

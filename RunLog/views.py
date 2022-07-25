@@ -1,12 +1,12 @@
 import datetime
 from datetime import date
+from multiprocessing import context
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import RunLogModel, RunTotalsModel
 from .serializers import RunLogSerializer, RunTotalSerializer, dateSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-# from rest_framework.pagination import PageNumberPagination
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -44,8 +44,29 @@ def logJSON(request):
         showall = RunLogModel.objects.filter(username=request.user,
                                              run_date__range=[firstDay, lastDay]).order_by('-run_date')
         serializer = RunLogSerializer(showall, many=True)
+
+        run_paginator = Paginator(serializer.data, 13)
+        page_num = request.GET.get('page')
+        page = run_paginator.get_page(page_num)
+
+        context = {
+            'count': run_paginator.count,
+            'total': run_paginator.num_pages,
+            'page': page
+        }
+
+        return render(request, 'logJSON.html', context)
+        # serializer = RunLogSerializer(showall, many=True)
+        #paginator.per_page = 10
+
+        #all_runs = paginator.paginate_queryset(showall, request)
+        #paginator.object_list = all_runs
+
+        #serializer = RunLogSerializer(run_paginator, many=True)
         # return JsonResponse({'runs': serializer.data})
-        return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
+        # return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
+        # return paginator.get_paginated_response(serializer.data)
+        # return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
     if request.method == 'POST':
         serializer = RunLogSerializer(data=request.data)
         if serializer.is_valid():
@@ -65,25 +86,24 @@ def totalsJSON(request):
 
 
 def addRun(request):
-    if request.method == 'POST':
-        run_date = request.POST['run_date']
-        run_time = request.POST['run_time']
-        distance = request.POST['distance']
-        pace = request.POST['pace']
-        bpm = request.POST['bpm']
-        remarks = request.POST['remarks']
+    run_date = request.POST['run_date']
+    run_time = request.POST['run_time']
+    distance = request.POST['distance']
+    pace = request.POST['pace']
+    bpm = request.POST['bpm']
+    remarks = request.POST['remarks']
 
-        RunLogModel.objects.create(
-            run_date=run_date,
-            run_time=run_time,
-            distance=distance,
-            pace=pace,
-            bpm=bpm,
-            remarks=remarks,
-            username=request.user,
-        )
+    RunLogModel.objects.create(
+        run_date=run_date,
+        run_time=run_time,
+        distance=distance,
+        pace=pace,
+        bpm=bpm,
+        remarks=remarks,
+        username=request.user,
+    )
 
-        return render(request, 'log.html')
+    return render(request, 'log.html')
 
 
 def editRun(request, id):
@@ -96,8 +116,6 @@ def updateRun(request, id):
     form = runForms(request.POST, instance=updaterun)
     if form.is_valid():
         form.save()
-        # messages.success(request, 'Run updated.')
-        # return render(request, 'edit.html', {'RunLogModel': updaterun})
         return redirect('showLog')
     else:
         messages.success(
@@ -299,10 +317,38 @@ def archiveTotals(request):
 def archiveLogs(request):
     if request.method == 'GET':
         showall = RunLogModel.objects.filter(
-            run_date__lte=firstDay).order_by('run_date')
+            run_date__lte=firstDay).order_by('-run_date')
         serializer = RunLogSerializer(showall, many=True)
+        run_paginator = Paginator(serializer.data, 13)
+        page_num = request.GET.get('page')
+        page = run_paginator.get_page(page_num)
+
+        context = {
+            'count': run_paginator.count,
+            'total': run_paginator.num_pages,
+            'page': page
+        }
+
+        return render(request, 'archiveLogs.html', context)
         # return JsonResponse({'archivedRuns': serializer.data})
-        return render(request, 'archiveLogs.html', {'dataArchiveLog': serializer.data})
+        # return render(request, 'archiveLogs.html', {'dataArchiveLog': serializer.data})
+
+
+def editRunArchive(request, id):
+    editrun = RunLogModel.objects.get(id=id)
+    return render(request, 'editArchive.html', {'RunLogModel': editrun})
+
+
+def updateRunArchive(request, id):
+    updaterun = RunLogModel.objects.get(id=id)
+    form = runForms(request.POST, instance=updaterun)
+    if form.is_valid():
+        form.save()
+        return redirect('archiveLogs')
+    else:
+        messages.success(
+            request, 'Run not updated. Make sure you enter data in fields in correct format.')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def archiveCharts(request):

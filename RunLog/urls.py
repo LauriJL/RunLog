@@ -31,6 +31,8 @@ urlpatterns = [
     path('combinedChart', views.combined_chart, name='combinedChart'),
     path('archiveTotals', views.archiveTotals, name='archiveTotals'),
     path('archiveLogs', views.archiveLogs, name='archiveLogs'),
+    path('editArchive/<id>', views.editRunArchive, name="editRunArchive"),
+    path('updateRunArchive/<id>', views.updateRunArchive, name="updateRunArchive"),
     path('archiveCharts', views.archiveCharts, name='archiveCharts'),
     path('archiveChartData', views.archive_chart, name='archiveChartData'),
     path('users/', include('django.contrib.auth.urls')),

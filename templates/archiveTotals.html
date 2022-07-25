@@ -19,9 +19,11 @@
             <a class="nav-link" href="#" data-toggle="tab" onClick="window.location.reload();">All</a>
         </li>
         {% for x in dataArchiveTotals %}
+        {% if x.username == user.get_username %}
         <li class="nav-item">
             <a class="nav-link" href="#{{x.yr}}" data-toggle="tab">{{x.yr}}</a>
         </li>
+        {% endif %}
         {% endfor %}
     </ul>
 </div>
