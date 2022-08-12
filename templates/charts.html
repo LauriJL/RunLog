@@ -72,6 +72,8 @@
       success: function (data) {
 
         var ctx = $bpmChart[0].getContext("2d");
+        var minBpmChart = parseInt((Math.min(...data.data)) / 10, 10) * 10;
+        var maxBpmChart = parseInt((Math.max(...data.data)) / 10, 10 + 1) * 10;
 
         new Chart(ctx, {
           type: 'line',
@@ -97,8 +99,8 @@
             scales: {
                 yAxes: [{
                   ticks:{
-                    min: 100,
-                    max: 160,
+                    min: minBpmChart,
+                    max: maxBpmChart,
                       }
                     }],
                 xAxes: {
@@ -124,7 +126,8 @@ $.ajax({
     success: function (data) {
 
     var ctx = $distanceChart[0].getContext("2d");
-      console.log(data.average)
+    var maxDistanceChart = (parseInt((Math.max(...data.data)) / 10, 10) + 1) * 10;
+
     new Chart(ctx, {
     type: 'bar',
     data: {
@@ -162,7 +165,7 @@ $.ajax({
                 steps: 10,
                 stepValue: 5,
                 beginAtZero: true,
-                max: 20
+                max: maxDistanceChart,
                 }
             }]
         }
@@ -216,10 +219,10 @@ const NUMBER_CFG = {decimals: 2};
               yAxes: [{
                   display: true,
                   ticks: {
-                    steps: 1,
+                    steps: 2,
                     stepValue: 5,
                     min: 5,
-                    max: 8
+                    max: 7.5
                   }
               }]
           },
