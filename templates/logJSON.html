@@ -6,8 +6,38 @@
 
 <div class="container-fluid">
     <h3>All Runs in {% now 'Y' %}</h3>
-    <p>{{ count }} runs in {% now 'Y' %}</p>
-    <p>
+
+    <p><b class="btn btn-outline-primary btn-sm" style="border: solid; border-width: 2px; border-radius: 15px; pointer-events: none;">{{ count }}</b> runs in {% now 'Y' %}</p>
+
+    <p style="text-align:center">
+        {% if total > 1 and not page.has_previous %}
+        <!-- <p><b class="btn btn-outline-primary btn-sm" style="border: solid; border-width: 2px; border-radius: 15px; pointer-events: none;">{{ count }}</b> runs in {% now 'Y' %}</p> -->
+        <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angles-left"></i> First</a>
+        <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angle-left"></i> Previous</a>
+        &nbsp;&nbsp;&nbsp; Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'showLog' %}?page={{ page.next_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-right"></i> Next</a>
+        <a href="{% url 'showLog' %}?page={{ total }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-right"></i> Last</a>
+        {% endif %}
+
+        {% if total > 1 and page.has_previous and page.has_next %}
+        <a href="{% url 'showLog' %}?page={{ page.first }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-left"></i> First</a>
+        <a href="{% url 'showLog' %}?page={{ page.previous_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-left"></i> Previous</a>
+        &nbsp;&nbsp;&nbsp; Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'showLog' %}?page={{ page.next_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-right"></i> Next</a>
+        <a href="{% url 'showLog' %}?page={{ page.total }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-right"></i> Last</a>
+        {% endif %}
+
+        {% if total > 1 and page.has_previous and not page.has_next%}
+        <a href="{% url 'showLog' %}?page={{ page.first }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-left"></i> First</a>
+        <a href="{% url 'showLog' %}?page={{ page.previous_page_number }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angle-left"></i> Previous</a>
+        &nbsp;&nbsp;&nbsp; Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp;
+        <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angle-right"></i> Next</a>
+        <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angles-right"></i> Last</a>
+        {% endif %}
+     </p>
+    
+    
+    <!-- <p>
        Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp;
        {% if total > 2 and page.has_previous and page.previous_page_number != 1 %}
        <a href="{% url 'showLog' %}?page={{ page.first }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-left"></i> First</a>
@@ -21,9 +51,9 @@
         {% if total > 2 and page.has_next and page.next_page_number != total %}
         <a href="{% url 'showLog' %}?page={{ total }}" class="btn btn-outline-success btn-sm" style="width:9.45em;"><i class="fa-solid fa-angles-right"></i> Last</a>
         {% endif %}
-    </p>
+    </p> -->
     <table class="table table-sm">
-        <thead class="thead-dark rounded" style="background-color: #FCEDDA;">
+        <thead class="thead-dark rounded" style="background-color: #A7D2CB;">
             <tr>
                 <th style="width: 12.5%">Date</th>
                 <th style="width: 10%">Time</th>

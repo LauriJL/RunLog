@@ -105,7 +105,7 @@
                         <p class="card-text">{{x.togo}} km (goal: <a href="{% url 'goal' %}" style="text-decoration: none;">{{x.goal}}</a> km)</p>
                         {% endif %}
                         {% if x.goal and x.togo <= 0 %}
-                        <p class="card-text">Goal {{x.goal}} km reached ({{x.total_distance}} km run)! <a href="{% url 'goal' %}" class="btn-link"><i style="color:green;" class="fas fa-light fa-trophy"></i></a></p>
+                        <p class="card-text">Goal {{x.goal}} km reached ({{x.total_distance}} km run)! <a href="{% url 'goal' %}" class="btn-link"><i style="color:#FFCA03;" class="fas fa-light fa-trophy"></i></a></p>
                         {% endif %}
                     </div>
                 </div>

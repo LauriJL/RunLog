@@ -57,12 +57,12 @@ def logJSON(request):
 
         return render(request, 'logJSON.html', context)
         # serializer = RunLogSerializer(showall, many=True)
-        #paginator.per_page = 10
+        # paginator.per_page = 10
 
-        #all_runs = paginator.paginate_queryset(showall, request)
-        #paginator.object_list = all_runs
+        # all_runs = paginator.paginate_queryset(showall, request)
+        # paginator.object_list = all_runs
 
-        #serializer = RunLogSerializer(run_paginator, many=True)
+        # serializer = RunLogSerializer(run_paginator, many=True)
         # return JsonResponse({'runs': serializer.data})
         # return render(request, 'logJSON.html', {'dataLogJSON': serializer.data})
         # return paginator.get_paginated_response(serializer.data)
@@ -143,7 +143,7 @@ def goal(request):
 
 
 def addGoal(request):
-    #editgoal = RunTotalsModel.objects.get(id=id)
+    # editgoal = RunTotalsModel.objects.get(id=id)
     return render(request, 'addGoal.html', {})
 
 

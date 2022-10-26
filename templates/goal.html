@@ -46,10 +46,10 @@
                         <h4 class="card-title">You have this far to go...</h4>
                         <p style="font-size:135%;font-weight: bold;" class="card-text">{{total.togo}} km</p>
                         {% elif total.togo == 0 %}
-                        <h4 class="card-title">Goal reached! <i style="color:green;" class="fas fa-light fa-trophy"></i></h4>
+                        <h4 class="card-title">Goal reached! <i style="color:#FFCA03;" class="fas fa-light fa-trophy"></i></h4>
                         <p style="font-size:135%;font-weight: bold;" class="card-text">Exactly {{total.total_distance}} km run! </p>
                         {% elif total.togo < 0 %}
-                        <h4 class="card-title">Goal reached! <i style="color:cyan;" class="fas fa-light fa-trophy"></i></h4>
+                        <h4 class="card-title">Goal reached! <i style="color:#FFCA03;" class="fas fa-light fa-trophy"></i></h4>
                         <p style="font-size:135%;font-weight: bold;" class="card-text">{{ total.togo|convert_to_positive }} km over your goal!</p>
                         {% endif %}   
                     </div>
@@ -80,12 +80,12 @@
             var goal = data.goal[0]
             var togo = goal - total
             var max_value = goal
-            var togo_color = "lightgrey"
+            var togo_color = "#FFB4B4"
 
             if (total > goal){
                 togo = togo * -1
                 total = goal
-                togo_color = 'cyan'
+                togo_color = '#FFCA03'
                 max_value = total+togo
             }
             new Chart(ctx, 
@@ -94,7 +94,7 @@
                 labels: [],
                 datasets: [{
                     data: [total],
-                    backgroundColor: "green",
+                    backgroundColor: "#53BF9D",
                 }, {
                     data: [togo],
                     backgroundColor: togo_color,
