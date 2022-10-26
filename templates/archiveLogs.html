@@ -8,7 +8,6 @@
     <h3>All Runs Before {% now 'Y' %}</h3>
     <br/>
     <p style="text-align:center">
-        <!-- Page {{ page.number }} of {{ total }} &nbsp;&nbsp;&nbsp; -->
         {% if total > 1 and not page.has_previous %}
         <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angles-left"></i> First</a>
         <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angle-left"></i> Previous</a>
@@ -32,8 +31,6 @@
         <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angle-right"></i> Next</a>
         <a href="#" class="btn btn-outline-secondary btn-sm" style="width:9.45em; pointer-events: none;"><i class="fa-solid fa-angles-right"></i> Last</a>
         {% endif %}
-
-
      </p>
     <table class="table table-sm">
         <thead class="thead-dark rounded" style="background-color: #FCEDDA">
