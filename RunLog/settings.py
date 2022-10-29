@@ -67,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'RunDB',
         'USER': 'postgres',
-        'PASSWORD': 'Fawad4F8ka',
+        'PASSWORD': 'postgres',
         'HOST': '127.0.0.1',
         'PORT': '5433',
     }
