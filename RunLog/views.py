@@ -308,7 +308,8 @@ def getYears(request):
 
 def archiveTotals(request):
     if request.method == 'GET':
-        showTotals = RunTotalsModel.objects.all().filter(yr__lt=currentYear)
+        showTotals = RunTotalsModel.objects.all().filter(
+            username=request.user, yr__lt=currentYear).order_by('-yr')
         serializer = RunTotalSerializer(showTotals, many=True)
         return render(request, 'archiveTotals.html', {'dataArchiveTotals': serializer.data})
         # return JsonResponse({'totalsArchive': serializer.data})

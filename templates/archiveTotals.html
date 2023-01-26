@@ -124,13 +124,12 @@
                     </div>
                     {% endif %}
                     {% if x.togo <= 0 %}
-                    <div class="card border border-success">
+                    <div class="card border border-success" style="height: 6rem;">
                         <div class="card-body">                            
-                            <p class="card-text"> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> km reached! <i style="color:green;" class="fas fa-light fa-trophy"></i>
+                            <p class="card-text"><i style="color:green;" class="fas fa-light fa-trophy"></i> You ran {{ x.total_distance }} km. Your goal of <b>{{x.goal}}</b> km reached! 
                                 {% if x.togo|convert_to_positive  > 0%}
                                 {{x.togo|convert_to_positive}} km over your goal!</p>
                                 {% endif %}
-                                <p></p>
                          </div>
                     </div>
                     {% endif %}
